@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Entity
 {
-    public class Question : Base.Base
+    public class Question
     {
+        public int Id { get; set; }
         public string QuestionText { get; set; }
-        public string Answer { get; set; }
+        public string CorrectAnswer { get; set; }
     }
 }

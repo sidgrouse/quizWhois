@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.Models.Base
+namespace QuizWhois.Common.Models.Base
 {
     public abstract class BaseModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
     }
 }

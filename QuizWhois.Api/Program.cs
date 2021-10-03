@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace QuizWhois
+namespace QuizWhois.Api
 {
     public class Program
     {

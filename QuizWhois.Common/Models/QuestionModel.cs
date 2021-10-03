@@ -1,14 +1,14 @@
-﻿using System;
+﻿using QuizWhois.Common.Models.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entity
+namespace QuizWhois.Common.Models
 {
-    public class Question
+    public class QuestionModel : BaseModel
     {
-        public int Id { get; set; }
         public string QuestionText { get; set; }
         public string CorrectAnswer { get; set; }
     }

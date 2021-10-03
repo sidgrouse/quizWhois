@@ -4,12 +4,12 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:20653",
-      "sslPort": 44330
+      "applicationUrl": "http://localhost:3720",
+      "sslPort": 44304
     }
   },
   "profiles": {
-    "QuizWhois": {
+    "QuizWhois.Api": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

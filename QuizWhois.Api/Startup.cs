@@ -37,9 +37,9 @@ namespace QuizWhois.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "QuizWhois.Api", Version = "v1" });
             });
 
-            string connection = Configuration.GetConnectionString("DefaultConnection");
+            string dbConnection = Configuration.GetConnectionString("QuestionDb");
             services.AddDbContext<ApplicationContext>(options =>
-                options.UseSqlServer(connection));
+                options.UseSqlServer(dbConnection));
 
             services.AddScoped<IQuestionService, QuestionService>();
         }

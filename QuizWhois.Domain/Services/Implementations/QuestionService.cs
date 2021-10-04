@@ -19,14 +19,16 @@ namespace QuizWhois.Domain.Services.Implementations
             _context = context;
         }
 
-        public void AddQuestion(QuestionModel operationModel)
+        public QuestionModel AddQuestion(QuestionModel operationModel)
         {
             if (operationModel == null || operationModel.QuestionText == string.Empty || operationModel.CorrectAnswer == string.Empty)
             {
                 throw new Exception("Operation Model was null");
             }
-            _context.Set<Question>().Add(new Question(operationModel.Id, operationModel.QuestionText, operationModel.CorrectAnswer));
+            var entity = new Question(operationModel.QuestionText, operationModel.CorrectAnswer);
+            _context.Set<Question>().Add(entity);
             _context.SaveChanges();
+            return new QuestionModel(entity.Id, entity.QuestionText, entity.CorrectAnswer);
         }
     }
 }

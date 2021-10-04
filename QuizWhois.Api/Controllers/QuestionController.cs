@@ -16,29 +16,19 @@ namespace QuizWhois.Api.Controllers
     public class QuestionController : Controller
     {
         private readonly IQuestionService _questionService;
-        private readonly ApplicationContext _applicationContext;
 
-        public QuestionController(IQuestionService questionService, ApplicationContext applicationContext)
+        public QuestionController(IQuestionService questionService)
         {
             _questionService = questionService;
-            _applicationContext = applicationContext;
-        }
-
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpGet]
-        [Route("getall")]
-        public JsonResult Get()
-        {
-            return new JsonResult(_applicationContext.Set<Question>().ToList());
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public JsonResult Post(QuestionModel questionModel)
+        public IActionResult Post(QuestionModel questionModel)
         {
-            _questionService.AddQuestion(questionModel);
-            return new JsonResult("Operation was successfully added");
+            var addedOperation = _questionService.AddQuestion(questionModel);
+            return Ok(addedOperation);
         }
     }
 }

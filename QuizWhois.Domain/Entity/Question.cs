@@ -12,9 +12,8 @@ namespace QuizWhois.Domain.Entity
         public string QuestionText { get; set; }
         public string CorrectAnswer { get; set; }
 
-        public Question(long id, string questionText, string correctAnswer)
+        public Question(string questionText, string correctAnswer)
         {
-            Id = id;
             QuestionText = questionText;
             CorrectAnswer = correctAnswer;
         }

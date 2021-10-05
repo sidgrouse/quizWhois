@@ -1,0 +1,46 @@
+{
+  "name": "signalr-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
+    "web-vitals": "^1.1.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "webbuild": "webpack --mode=development",
+    "webrelease": "webpack --mode=production",
+    "webpublish": "npm run release && dotnet publish -c Release"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "3.0.0",
+    "css-loader": "3.4.2",
+    "html-webpack-plugin": "3.2.0",
+    "mini-css-extract-plugin": "0.9.0",
+    "webpack": "^4.41.5",
+    "webpack-cli": "3.3.10"
+  }
+}

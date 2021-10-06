@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Http;
 using React.AspNet;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using JavaScriptEngineSwitcher.ChakraCore;
+using QuizWhois.Api.Hubs;
 
 namespace QuizWhois.Api
 {
@@ -34,6 +35,7 @@ namespace QuizWhois.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
             services.AddMemoryCache();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddReact();
@@ -77,6 +79,7 @@ namespace QuizWhois.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<QuestionHub>("/hub");
             });
         }
     }

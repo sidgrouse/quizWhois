@@ -1,16 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
-using QuizWhois.Domain.Entity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using QuizWhois.Domain.Entity;
 
 namespace QuizWhois.Domain.Database
 {
     public class ApplicationContext : DbContext
     {
         public DbSet<Question> Questions { get; set; }
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {

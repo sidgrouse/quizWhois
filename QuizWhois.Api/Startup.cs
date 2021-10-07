@@ -35,6 +35,8 @@ namespace QuizWhois.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
             services.AddSignalR();
             services.AddMemoryCache();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -58,12 +60,17 @@ namespace QuizWhois.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "QuizWhois.Api v1"));
+
+                app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials());
             }
 
             app.UseHttpsRedirection();

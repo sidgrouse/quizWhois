@@ -12,5 +12,6 @@ namespace QuizWhois.Domain.Services.Interfaces
         public double GetAverageRating(long questionid);
         public QuestionRatingModel AddRating(QuestionModel questionModel, long userId, uint rating);
         public QuestionRatingModel UpdateRating(QuestionModel questionModel, long userId, uint rating);
+        public QuestionRatingModel DeleteRating(QuestionModel questionModel, long userId);
     }
 }

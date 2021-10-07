@@ -25,8 +25,8 @@ namespace QuizWhois.Domain.Services.Implementations
             {
                 throw new Exception("Invalid data");
             }
-            return _context.Set<QuestionRating>().Where(x => x.QuestionId == questionId).Select(x => x.RatingNumber)
-                .ToList().ConvertAll(x => (double)x).Average();
+            return _context.Set<QuestionRating>().Where(x => x.QuestionId == questionId && x.RatingNumber != 0)
+                .Select(x => x.RatingNumber).ToList().ConvertAll(x => (double)x).Average();
         }
 
         public QuestionRatingModel AddRating(QuestionModel questionModel, long userId, uint rating)
@@ -51,6 +51,11 @@ namespace QuizWhois.Domain.Services.Implementations
             entity.RatingNumber = rating;
             _context.Set<QuestionRating>().Update(entity);
             return new QuestionRatingModel(entity.Id, entity.QuestionId, entity.UserId, entity.RatingNumber);
+        }
+
+        public QuestionRatingModel DeleteRating(QuestionModel questionModel, long userId)
+        {
+            return UpdateRating(questionModel, userId, 0);
         }
     }
 }

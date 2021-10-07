@@ -38,6 +38,15 @@ namespace QuizWhois.Api.Controllers
             return Ok(updatingRating);
         }
 
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Delete(QuestionModel questionModel, long userId)
+        {
+            _questionRatingService.DeleteRating(questionModel, userId);
+            return Ok("Deleted");
+        }
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

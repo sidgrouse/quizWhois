@@ -44,7 +44,7 @@ namespace QuizWhois.Api.Controllers
         public IActionResult Delete(QuestionModel questionModel, long userId)
         {
             _questionRatingService.DeleteRating(questionModel, userId);
-            return Ok("Deleted");
+            return Ok();
         }
 
         [HttpGet]

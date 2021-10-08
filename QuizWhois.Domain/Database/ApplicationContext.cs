@@ -27,8 +27,10 @@ namespace QuizWhois.Domain.Database
             modelBuilder.Entity<QuestionRating>(QuestionRatingConfigure);
             modelBuilder.Entity<User>(UserConfigure);
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, Login = "Qwerty" }
-                );
+                new User [] {
+                new User { Id = 1, Login = "Qwerty" },
+                new User { Id = 2, Login = "Asdfg" },
+                });
         }
 
         public void QuestionConfigure(EntityTypeBuilder<Question> builder)

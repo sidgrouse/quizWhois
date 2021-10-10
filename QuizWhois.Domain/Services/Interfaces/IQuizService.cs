@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using QuizWhois.Common.Models;
 
+
 namespace QuizWhois.Domain.Services.Interfaces
 {
-    public interface IQuestionService
+    public interface IQuizService
     {
-        public QuestionModel AddQuestion(QuestionModel operationModel);
+        public Task<QuizModel> AddToQuiz(long quiz, long question); //, int index
 
-        public Task AddMany(IEnumerable<QuestionModel> questionsToAdd);
+        public Task<QuizModel> FormQuiz(List<long> question, string quizName = "");
     }
 }

@@ -42,6 +42,7 @@ namespace QuizWhois.Api
                 options.UseSqlServer(dbConnection));
 
             services.AddScoped<IQuestionService, QuestionService>();
+            services.AddScoped<IQuizService, QuizService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

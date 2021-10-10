@@ -12,6 +12,8 @@ namespace QuizWhois.Domain.Database
     {
         public DbSet<Question> Questions { get; set; }
 
+        public DbSet<Quiz> Quizzes { get; set; }
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {
@@ -21,6 +23,9 @@ namespace QuizWhois.Domain.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Question>().HasKey(q => q.Id);
+
+            modelBuilder.Entity<Quiz>();
+                
         }
     }
 }

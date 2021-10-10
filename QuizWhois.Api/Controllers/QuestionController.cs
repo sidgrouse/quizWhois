@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Entity;
 using QuizWhois.Common.Models;
+using Microsoft.AspNetCore.Authorization;
+#nullable enable
 
 namespace QuizWhois.Api.Controllers
 {
@@ -29,6 +31,15 @@ namespace QuizWhois.Api.Controllers
         {
             var addedOperation = _questionService.AddQuestion(questionModel);
             return Ok(addedOperation);
+        }
+        
+        [HttpPost("AddMany")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> AddMany(List<QuestionModel> questions)
+        {
+            await _questionService.AddMany(questions);
+            return Ok();
         }
     }
 }

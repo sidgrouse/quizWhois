@@ -53,13 +53,12 @@ namespace QuizWhois.Domain.Services.Implementations
                 _db.Add(quiz);
             }
 
-            if (questionToAdd == null)
+            if (questionToAdd != null && !quiz.Questions.Contains(questionToAdd))
             {
-                // something bad happened
+                quiz.Questions.Add(questionToAdd);
+                _db.SaveChanges();
             }
-            
-            quiz.Questions.Add(questionToAdd);
-            _db.SaveChanges();
+
             return new QuizModel(quiz.Id, quiz.Questions.Select(x => x.Id), quiz.Name);
         }
     }

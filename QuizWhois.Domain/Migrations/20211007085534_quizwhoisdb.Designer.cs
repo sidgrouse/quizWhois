@@ -10,7 +10,7 @@ namespace QuizWhois.Domain.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
     [Migration("20211007085534_quizwhoisdb")]
-    partial class quizwhoisdb
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

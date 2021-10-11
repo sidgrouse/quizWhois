@@ -2,7 +2,7 @@
 
 namespace QuizWhois.Domain.Migrations
 {
-    public partial class quizwhoisdb : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -3,10 +3,7 @@ using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Entity;
 using QuizWhois.Domain.Services.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QuizWhois.Domain.Services.Implementations
 {
@@ -25,58 +22,58 @@ namespace QuizWhois.Domain.Services.Implementations
             {
                 throw new Exception("Invalid data");
             }
-            return _context.Set<QuestionRating>().Where(x => x.QuestionId == questionId && x.RatingNumber != 0)
-                .Select(x => x.RatingNumber).ToList().ConvertAll(x => (double)x).Average();
+            return _context.Set<QuestionRating>().Where(x => x.QuestionId == questionId)
+                .Select(x => x.Value).ToList().ConvertAll(x => (double)x).Average();
         }
 
-        public QuestionRatingModel AddRating(QuestionModel questionModel, long userId, uint rating)
+        public QuestionRatingModel AddRating(long questionModelId, long userId, uint rating)
         {
-            if (questionModel == null || userId <= 0)
+            if (questionModelId <= 0 || userId <= 0)
             {
                 throw new Exception("Invalid data");
             }
-            if (rating > 5)
+            if (rating > 5 || rating < 1)
             {
                 throw new Exception("Rating more than 5");
             }
-            if (_context.Set<QuestionRating>().FirstOrDefault(x => x.QuestionId == questionModel.Id && x.UserId == userId) != null)
+            if (_context.Set<QuestionRating>().FirstOrDefault(x => x.QuestionId == questionModelId && x.UserId == userId) != null)
             {
                 throw new Exception("This rating already exist");
             }
-            var entity = new QuestionRating(questionModel.Id, userId, rating);
+            var entity = new QuestionRating(questionModelId, userId, rating);
             _context.Set<QuestionRating>().Add(entity);
             _context.SaveChanges();
-            return new QuestionRatingModel(entity.Id, entity.QuestionId, entity.UserId, entity.RatingNumber);
+            return new QuestionRatingModel(entity.Id, entity.QuestionId, entity.UserId, entity.Value);
         }
 
-        public QuestionRatingModel UpdateRating(QuestionModel questionModel, long userId, uint rating)
+        public QuestionRatingModel UpdateRating(long questionModelId, long userId, uint rating)
         {
-            if (questionModel == null || userId <= 0)
+            if (questionModelId <= 0 || userId <= 0)
             {
                 throw new Exception("Invalid data");
             }
-            if (rating > 5)
+            if (rating > 5 || rating < 1)
             {
                 throw new Exception("Rating more than 5");
             }
-            var entity = _context.Set<QuestionRating>().FirstOrDefault(x => x.QuestionId == questionModel.Id && x.UserId == userId);
+            var entity = _context.Set<QuestionRating>().FirstOrDefault(x => x.QuestionId == questionModelId && x.UserId == userId);
             if (entity == null)
             {
                 throw new Exception("Rating is not found");
             }
-            entity.RatingNumber = rating;
+            entity.Value = rating;
             _context.Set<QuestionRating>().Update(entity);
             _context.SaveChanges();
-            return new QuestionRatingModel(entity.Id, entity.QuestionId, entity.UserId, entity.RatingNumber);
+            return new QuestionRatingModel(entity.Id, entity.QuestionId, entity.UserId, entity.Value);
         }
 
-        public bool DeleteRating(QuestionModel questionModel, long userId)
+        public bool DeleteRating(long questionModelId, long userId)
         {
-            if (questionModel == null || userId <= 0)
+            if (questionModelId <= 0 || userId <= 0)
             {
                 throw new Exception("Invalid data");
             }
-            var entity = _context.Set<QuestionRating>().FirstOrDefault(x => x.QuestionId == questionModel.Id && x.UserId == userId);
+            var entity = _context.Set<QuestionRating>().FirstOrDefault(x => x.QuestionId == questionModelId && x.UserId == userId);
             if (entity == null)
             {
                 throw new Exception("Rating is not found");

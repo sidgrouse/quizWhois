@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using QuizWhois.Domain.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QuizWhois.Domain.Database
 {
@@ -27,7 +22,7 @@ namespace QuizWhois.Domain.Database
             modelBuilder.Entity<QuestionRating>(QuestionRatingConfigure);
             modelBuilder.Entity<User>(UserConfigure);
             modelBuilder.Entity<User>().HasData(
-                new User [] {
+                new User[] {
                 new User { Id = 1, Login = "Qwerty" },
                 new User { Id = 2, Login = "Asdfg" },
                 });
@@ -43,7 +38,7 @@ namespace QuizWhois.Domain.Database
         public void QuestionRatingConfigure(EntityTypeBuilder<QuestionRating> builder)
         {
             builder.ToTable("QuestionRating").HasKey(x => x.Id);
-            builder.Property(x => x.RatingNumber).IsRequired();
+            builder.Property(x => x.Value).IsRequired();
             builder.Property(x => x.QuestionId).IsRequired();
             builder.Property(x => x.UserId).IsRequired();
         }

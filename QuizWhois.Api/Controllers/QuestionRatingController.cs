@@ -2,10 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizWhois.Common.Models;
 using QuizWhois.Domain.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace QuizWhois.Api.Controllers
 {
@@ -23,27 +19,27 @@ namespace QuizWhois.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post(QuestionModel questionModel, long userId, uint rating)
+        public ActionResult<QuestionRatingModel> Post(long questionModelId, long userId, uint rating)
         {
-            var addedRating = _questionRatingService.AddRating(questionModel, userId, rating);
+            var addedRating = _questionRatingService.AddRating(questionModelId, userId, rating);
             return Ok(addedRating);
         }
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Update(QuestionModel questionModel, long userId, uint rating)
+        public ActionResult<QuestionRatingModel> Update(long questionModelId, long userId, uint rating)
         {
-            var updatingRating = _questionRatingService.UpdateRating(questionModel, userId, rating);
+            var updatingRating = _questionRatingService.UpdateRating(questionModelId, userId, rating);
             return Ok(updatingRating);
         }
 
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Delete(QuestionModel questionModel, long userId)
+        public IActionResult Delete(long questionModelId, long userId)
         {
-            _questionRatingService.DeleteRating(questionModel, userId);
+            _questionRatingService.DeleteRating(questionModelId, userId);
             return Ok();
         }
 
@@ -51,7 +47,7 @@ namespace QuizWhois.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("getaverage")]
-        public IActionResult GetAverage(long questionId)
+        public ActionResult<double> GetAverage(long questionId)
         {
             var averageRating = _questionRatingService.GetAverageRating(questionId);
             return Ok(averageRating);

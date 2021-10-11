@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using QuizWhois.Domain.Entity;
 
 namespace QuizWhois.Domain.Database
@@ -24,8 +25,9 @@ namespace QuizWhois.Domain.Database
         {
             modelBuilder.Entity<Question>().HasKey(q => q.Id);
 
-            modelBuilder.Entity<Quiz>();
-                
+            modelBuilder.Entity<Quiz>().HasKey(q => q.Id);
+            modelBuilder.Entity<Quiz>().HasMany(x => x.Questions).WithOne();
+
         }
     }
 }

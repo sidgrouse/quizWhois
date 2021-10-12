@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace QuizWhois.Domain.Entity
 {
-	public class Quiz
-	{
-		public Quiz(string name = "")
-		{
-			Name = name;
-		}
+    public class Quiz
+    {
+        public Quiz(string name = "")
+        {
+            Name = name;
+        }
 
-		public long Id { get; set; }
+        public long Id { get; set; }
 
-		public List<Question> Questions { get; set; } = new List<Question>();
+        public List<Question> Questions { get; set; } = new List<Question>();
 
-		public string Name { get; set; }
+        public string Name { get; set; }
 
-	}
+    }
 }

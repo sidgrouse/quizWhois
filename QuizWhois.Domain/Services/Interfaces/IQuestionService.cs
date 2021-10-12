@@ -1,4 +1,6 @@
 ﻿using QuizWhois.Common.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace QuizWhois.Domain.Services.Interfaces
 {

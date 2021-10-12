@@ -33,9 +33,9 @@ namespace QuizWhois.Api.Controllers
         // [Authorize]
         [HttpPost("CreateSet")]
         [ProducesResponseType(typeof(QuizModel), StatusCodes.Status200OK)]
-        public async Task<ActionResult<QuizModel>> CreateSet(List<long> questions)
+        public async Task<ActionResult<QuizModel>> CreateSet(List<long> questions, string quizName = "")
         {
-            var formedQuiz = await _quizService.FormQuiz(questions);
+            var formedQuiz = await _quizService.FormQuiz(questions, quizName);
             return formedQuiz;
         }
     }

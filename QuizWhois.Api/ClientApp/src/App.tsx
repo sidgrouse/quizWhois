@@ -1,36 +1,38 @@
 import './App.css';
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
-import React, { useEffect, useState } from "react";
-import QuestionList from './Components/QuestionList.jsx';
+import * as React from "react";
+import { QuestionList } from './Components/QuestionList';
+import { Answer, IQuestion } from './interfaces'
 
-var currentId = 0
-var currentQuestion = ''
-var key = 0
-function App() {
 
-  const [questions, addQuestion] = useState([]);
-  const [connection, setConnection] = useState(null);
-  const [inputText, setInputText] = useState("");
+let currentId: number = 0
+let key: number = 0
+
+const App: React.FC = () => {
+
+  const [questions, addQuestion] = React.useState<IQuestion[]>([]);
+  const [connection, setConnection] = React.useState(null);
+  const [inputText, setInputText] = React.useState<string>("");
   
-  useEffect(() => {
+  React.useEffect(() => {
     const connect = new HubConnectionBuilder()
       .withUrl("https://localhost:5001/hub")
       .withAutomaticReconnect()
       .build();
-
+      console.log('connect')
     setConnection(connect);
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (connection) {
       connection
         .start()
         .then(() => {
-          connection.on("ReceiveAnswer", (id, isAnswerRight) => {
+          connection.on("ReceiveAnswer", (id: number, isAnswerRight: string) => {
             if (isAnswerRight) {
               addQuestion(prevState => {
                 const newState = [...prevState]
-                newState[key-1].cssClass = 1
+                newState[key-1].cssClass = Answer.right
                 return newState
               })
             } 
@@ -38,30 +40,27 @@ function App() {
             {
               addQuestion(prevState => {
                 const newState = [...prevState]
-                newState[key-1].cssClass = 2
+                newState[key-1].cssClass = Answer.wrong
                 return newState
               })
             }
           });
-          connection.on("ReceiveQuestion", (id, question) => {
+          connection.on("ReceiveQuestion", (id: number, questionText: string) => {
+            console.log('receiveQ')
             currentId = id
-            currentQuestion = question
             key++
-
-            var questionObj = new Object();
-            questionObj.id = id;
-            questionObj.question = question;
-            questionObj.key = key
-            questionObj.cssClass = 0
+            console.log(id,questionText)
+            let questionObj: IQuestion = {id : id, text: questionText, key : key, cssClass: Answer.default};
+            console.log('xth1')
             addQuestion(oldArray => [...oldArray, questionObj]);
           });
         })
-        .catch((error) => console.log(error));
+        .catch((error: any) => console.log(error));
     }
   }, [connection]);
 
   const sendAnswer = async () => {
-    if (connection) await connection.send("SendAnswer", currentId, currentQuestion, inputText);
+    if (connection) await connection.send("SendAnswer", currentId, inputText);
       setInputText("");
   };
 
@@ -80,10 +79,10 @@ function App() {
           setInputText(input.target.value);
         }}
       />
-      <button onClick={sendAnswer} type="primary">
+      <button onClick={sendAnswer} className="primary">
         Send Answer
       </button>
-      <button onClick={sendQuestion} type="primary">
+      <button onClick={sendQuestion} className="primary">
         Get Question
       </button>
     </div>

@@ -7,8 +7,9 @@ using QuizWhois.Common.Models;
 
 namespace QuizWhois.Domain.Services.Interfaces
 {
-    public interface IQuestionService
+    public interface IUserAnswerService
     {
-        public QuestionModel AddQuestion(QuestionModel operationModel);
+        public QuestionModel GetRandomQuestion();
+        public bool CheckAnswer(UserAnswerModel operationModel);
     }
 }

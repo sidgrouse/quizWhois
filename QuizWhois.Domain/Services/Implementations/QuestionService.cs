@@ -31,32 +31,6 @@ namespace QuizWhois.Domain.Services.Implementations
             return new QuestionModel(entity.Id, entity.QuestionText, entity.CorrectAnswer);
         }
 
-        public QuestionModel GetRandomQuestion()
-        {
-            var random = new Random().Next(0, _context.Set<Question>().Count());
-            var randomRecord = _context.Set<Question>().OrderBy(x => x.Id).Skip(random).FirstOrDefault();
-            if (randomRecord is null)
-            {
-                throw new Exception("GetRandomQuestion in QuestionService.GetRandomQuestion was null");
-            }
-            else
-                return new QuestionModel(randomRecord.Id, randomRecord.QuestionText, randomRecord.CorrectAnswer);
-        }
-
-        public bool CheckAnswer(QuestionModel operationModel)
-        {
-            if (operationModel == null || operationModel.QuestionText == string.Empty || operationModel.CorrectAnswer == string.Empty)
-            {
-                throw new Exception("OperationModel in QuestionService.CheckAnswer was null");
-            }
-            var selectQuestion = _context.Set<Question>().Where(x => x.Id == operationModel.Id && x.QuestionText == operationModel.QuestionText).FirstOrDefault();
-            if (selectQuestion is null)
-            {
-                throw new Exception("selectQuestion in QuestionService.CheckAnswer was null");
-            }
-            else
-                return operationModel.CorrectAnswer.Equals(selectQuestion.CorrectAnswer);
-
-        }
+        
     }
 }

@@ -39,7 +39,7 @@ namespace QuizWhois.Api
 
             services.AddSignalR();
             services.AddMemoryCache();
-            services.AddHttpContextAccessor()
+            services.AddHttpContextAccessor();
             services.AddReact();
             services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
 
@@ -54,6 +54,7 @@ namespace QuizWhois.Api
                 options.UseSqlServer(dbConnection));
 
             services.AddScoped<IQuestionService, QuestionService>();
+            services.AddScoped<IUserAnswerService, UserAnswerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,7 +70,7 @@ namespace QuizWhois.Api
                 app.UseCors(x => x
                 .AllowAnyMethod()
                 .AllowAnyHeader()
-                .SetIsOriginAllowed(origin => true) // allow any origin
+                .SetIsOriginAllowed(origin => true)
                 .AllowCredentials());
             }
 

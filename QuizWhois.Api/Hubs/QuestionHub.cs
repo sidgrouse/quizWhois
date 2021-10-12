@@ -10,24 +10,23 @@ namespace QuizWhois.Api.Hubs
 {
     public class QuestionHub: Hub
     {
-        private readonly IQuestionService _questionService;
-        public QuestionHub(IQuestionService questionService)
+        private readonly IUserAnswerService _userAnswerService;
+        public QuestionHub(IUserAnswerService userAnswerService)
         {
-            _questionService = questionService;
+            _userAnswerService = userAnswerService;
         }
         public async Task SendQuestion()
         {
-            var addedOperation = _questionService.GetRandomQuestion();
+            var addedOperation = _userAnswerService.GetRandomQuestion();
             await Clients.Caller.SendAsync("ReceiveQuestion", addedOperation.Id, addedOperation.QuestionText);
-
         }
-        public async Task SendAnswer(long id, string questionText, string questionAnswer) //QuestionModel questionModel
+        public async Task SendAnswer(long id, string userAnswer)
         {
-            if (questionText == string.Empty || questionAnswer == string.Empty)
+            if (userAnswer == string.Empty)
             {
-                throw new Exception("questionText ore questionAnswer in QuestionHub.SendAnswer is null");
+                throw new ArgumentException("userAnswer in QuestionHub.SendAnswer is empty");
             }
-            var isAnswerRight = _questionService.CheckAnswer(new QuestionModel(id, questionText, questionAnswer));
+            var isAnswerRight = _userAnswerService.CheckAnswer(new UserAnswerModel(id, userAnswer));
             await Clients.Caller.SendAsync("ReceiveAnswer", id, isAnswerRight);
 
         }

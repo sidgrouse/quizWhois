@@ -1,15 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using QuizWhois.Domain.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
-using QuizWhois.Domain.Database;
-using QuizWhois.Domain.Entity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using QuizWhois.Common.Models;
-using Microsoft.AspNetCore.Authorization;
-#nullable enable
+using QuizWhois.Domain.Services.Interfaces;
 
 namespace QuizWhois.Api.Controllers
 {

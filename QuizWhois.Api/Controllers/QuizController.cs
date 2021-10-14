@@ -13,7 +13,6 @@ namespace QuizWhois.Api.Controllers
     [Route("[controller]")]
     public class QuizController
     {
-
         private readonly IQuizService _quizService;
 
         public QuizController(IQuizService quizService)
@@ -22,7 +21,7 @@ namespace QuizWhois.Api.Controllers
         }
 
         // [Authorize]
-        [HttpPost("AddToSet")]
+        [HttpPost("{quizId}")]
         [ProducesResponseType(typeof(QuizModel),StatusCodes.Status200OK)]
         public async Task<ActionResult<QuizModel>> AddToSet(long quizId, QuestionModel questionModel)
         {
@@ -31,7 +30,7 @@ namespace QuizWhois.Api.Controllers
         }
 
         // [Authorize]
-        [HttpPost("CreateSet")]
+        [HttpPost("Create")]
         [ProducesResponseType(typeof(QuizModel), StatusCodes.Status200OK)]
         public async Task<ActionResult<QuizModel>> CreateSet(List<long> questions, string quizName = "")
         {

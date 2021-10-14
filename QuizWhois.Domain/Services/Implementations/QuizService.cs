@@ -34,8 +34,7 @@ namespace QuizWhois.Domain.Services.Implementations
             var quiz = await _db.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
             if (quiz == null)
             {
-                quiz = new Quiz();
-                _db.Add(quiz);
+                throw new System.Exception("Entry not found");
             }
 
             quiz.Questions.Add(question);

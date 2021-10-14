@@ -27,8 +27,8 @@ namespace QuizWhois.Api.Controllers
             return Ok(addedOperation);
         }
         
-        [HttpPost("AddMany")]
-        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [HttpPost("many")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> AddMany(List<QuestionModel> questions)
         {

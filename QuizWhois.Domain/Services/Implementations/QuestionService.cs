@@ -3,10 +3,6 @@ using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Entity;
 using QuizWhois.Domain.Services.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QuizWhois.Domain.Services.Implementations
 {

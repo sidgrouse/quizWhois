@@ -30,7 +30,7 @@ namespace QuizWhois.Api.Controllers
         }
 
         // [Authorize]
-        [HttpPost("Create")]
+        [HttpPost("create")]
         [ProducesResponseType(typeof(QuizModel), StatusCodes.Status200OK)]
         public async Task<ActionResult<QuizModel>> CreateSet(List<long> questions, string quizName = "")
         {

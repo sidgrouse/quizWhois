@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QuizWhois.Common.Models;
 using QuizWhois.Domain.Services.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace QuizWhois.Api.Controllers
 {

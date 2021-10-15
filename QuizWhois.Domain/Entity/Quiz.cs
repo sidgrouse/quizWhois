@@ -18,6 +18,5 @@ namespace QuizWhois.Domain.Entity
         public List<Question> Questions { get; set; } = new List<Question>();
 
         public string Name { get; set; }
-
     }
 }

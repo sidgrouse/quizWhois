@@ -20,6 +20,5 @@ namespace QuizWhois.Common.Models
         public List<long> Questions { get; set; } = new List<long>();
 
         public string Name { get; set; }
-
     }
 }

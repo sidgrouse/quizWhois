@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-      <CodeAnalysisRuleSet>.\tests.analyzers.ruleset</CodeAnalysisRuleSet>
-    <IsPackable>false</IsPackable>
+      <CodeAnalysisRuleSet>$(SolutionDir)\tests.analyzers.ruleset</CodeAnalysisRuleSet>
+      <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

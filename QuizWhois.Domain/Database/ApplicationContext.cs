@@ -22,15 +22,14 @@ namespace QuizWhois.Domain.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-
             modelBuilder.Entity<Question>(QuestionConfigure);
             modelBuilder.Entity<QuestionRating>(QuestionRatingConfigure);
             modelBuilder.Entity<User>(UserConfigure);
             modelBuilder.Entity<User>().HasData(
-                new User[] {
-                new User { Id = 1, Login = "Qwerty" },
-                new User { Id = 2, Login = "Asdfg" },
+                new User[]
+                {
+                    new User { Id = 1, Login = "Qwerty" },
+                    new User { Id = 2, Login = "Asdfg" },
                 });
             modelBuilder.Entity<Quiz>().HasKey(q => q.Id);
             modelBuilder.Entity<Quiz>().HasMany(x => x.Questions).WithOne();

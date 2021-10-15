@@ -11,54 +11,59 @@ namespace QuizWhois.Domain.Services.Implementations
 {
     public class QuizService : IQuizService
     {
-        private ApplicationContext _db { get; set; }
+        private readonly ApplicationContext _db;
 
         public QuizService(ApplicationContext context)
         {
             _db = context;
         }
 
-
         public async Task<QuizModel> FormQuiz(List<long> questions, string quizName = "")
         {
             var quizToSave = new Quiz(quizName);
-            var questionsOfQuiz = _db.Set<Question>().Where(x => questions.Contains(x.Id));
-            quizToSave.Questions = questionsOfQuiz.ToList();
-            _db.Set<Quiz>().Add(quizToSave);
+
+            foreach (var question in questions)
+            {
+                await AddToQuiz(quizToSave, question);
+            }
+
+            await _db.AddAsync(quizToSave);
             await _db.SaveChangesAsync();
-            return new QuizModel(quizToSave.Id, quizToSave.Questions.Select(x => x.Id));
+            return new QuizModel(quizToSave.Id, quizToSave.Questions.Select(x => x.Id), quizToSave.Name);
         }
 
-        public async Task<QuizModel> AddToQuiz(long quizId, Question question)
+        public async Task AddToQuiz(AddToSetModel[] addToSet)
         {
-            var quiz = await _db.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
-            if (quiz == null)
+            for (var i = 0; i < addToSet.Length; i++)
             {
-                throw new System.Exception("Entry not found");
+                await AddToQuiz(await QuizById(addToSet[i].QuizId), addToSet[i].QuestionId);
             }
 
-            quiz.Questions.Add(question);
-            _db.SaveChanges();
-            return new QuizModel(quiz.Id, quiz.Questions.Select(x => x.Id), quiz.Name);
+            this._db.SaveChanges();
         }
 
-        public async Task<QuizModel> AddToQuiz(long quizId, long question)
-        {
-            var questionToAdd = await _db.Set<Question>().FindAsync(question);
-            var quiz = await _db.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
+        private async Task<Quiz> QuizById(long quizId)
+        {            
+            var quiz = await _db.Set<Quiz>().FindAsync(quizId);                     
             if (quiz == null)
             {
-                quiz = new Quiz();
-                _db.Add(quiz);
+                throw new System.NullReferenceException("Quiz with given ID does not exist.");
             }
 
-            if (questionToAdd != null && !quiz.Questions.Contains(questionToAdd))
+            return quiz;
+        }
+
+        private async Task AddToQuiz(Quiz quiz, long question)
+        {
+            var questionToAdd = await _db.Set<Question>().FindAsync(question);            
+            if (questionToAdd != null && quiz != null && !quiz.Questions.Contains(questionToAdd))
             {
                 quiz.Questions.Add(questionToAdd);
-                _db.SaveChanges();
             }
-
-            return new QuizModel(quiz.Id, quiz.Questions.Select(x => x.Id), quiz.Name);
+            else if (questionToAdd == null)
+            {
+                throw new System.NullReferenceException("Question with given ID does not exist.");
+            }            
         }
     }
 }

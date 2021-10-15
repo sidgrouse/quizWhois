@@ -12,7 +12,7 @@ namespace QuizWhois.Common.Models
         {
             Id = id;
             Questions = questions.ToList();
-            Name = string.IsNullOrEmpty(name) ? name : id.ToString();
+            Name = string.IsNullOrEmpty(name) ? id.ToString() : name;
         }
 
         public long Id { get; set; }

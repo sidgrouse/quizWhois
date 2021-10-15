@@ -21,10 +21,10 @@ namespace QuizWhois.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post(QuestionModel questionModel)
+        public async Task<ActionResult<QuestionModel>> Post(QuestionModel questionModel)
         {
-            var addedOperation = _questionService.AddQuestion(questionModel);
-            return Ok(addedOperation);
+            var addedOperation = await _questionService.AddQuestion(questionModel);
+            return addedOperation;
         }
         
         [HttpPost("many")]

@@ -10,14 +10,14 @@ namespace QuizWhois.Domain.Services.Implementations
 {
     public class QuestionService : IQuestionService
     {
-        public ApplicationContext _context { get; set; }
+        private readonly ApplicationContext _context;
 
         public QuestionService(ApplicationContext context)
         {
             _context = context;
         }
 
-        public QuestionModel AddQuestion(QuestionModel operationModel)
+        public async Task<QuestionModel> AddQuestion(QuestionModel operationModel)
         {
             if (operationModel == null || operationModel.QuestionText == string.Empty || operationModel.CorrectAnswer == string.Empty)
             {
@@ -25,8 +25,8 @@ namespace QuizWhois.Domain.Services.Implementations
             }
 
             var entity = new Question(operationModel.QuestionText, operationModel.CorrectAnswer);
-            _context.Set<Question>().Add(entity);
-            _context.SaveChanges();
+            await _context.Set<Question>().AddAsync(entity);
+            await _context.SaveChangesAsync();
             return new QuestionModel(entity.Id, entity.QuestionText, entity.CorrectAnswer);
         }
 
@@ -34,9 +34,9 @@ namespace QuizWhois.Domain.Services.Implementations
         {
             foreach (var question in questionsToAdd)
             {
-                var entity = new Question(question.QuestionText, question.CorrectAnswer);
-                await _context.Set<Question>().AddAsync(entity);
+               await AddQuestion(question);
             }
+
             _context.SaveChanges();
         }
     }

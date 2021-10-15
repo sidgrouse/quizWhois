@@ -21,16 +21,16 @@ namespace QuizWhois.Api.Controllers
         }
 
         // [Authorize]
-        [HttpPost("{quizId}")]
-        [ProducesResponseType(typeof(QuizModel),StatusCodes.Status200OK)]
-        public async Task<ActionResult<QuizModel>> AddToSet(long quizId, QuestionModel questionModel)
+        [HttpPost("questions")]
+        [ProducesResponseType(typeof(QuizModel), StatusCodes.Status200OK)]
+        public async Task<ActionResult> AddToSet([FromBody] AddToSetModel[] model)
         {
-            var modifiedQuiz = await _quizService.AddToQuiz(quizId, questionModel.Id);
-            return modifiedQuiz;
+            await _quizService.AddToQuiz(model);
+            return new OkResult();
         }
 
         // [Authorize]
-        [HttpPost("create")]
+        [HttpPost]
         [ProducesResponseType(typeof(QuizModel), StatusCodes.Status200OK)]
         public async Task<ActionResult<QuizModel>> CreateSet(List<long> questions, string quizName = "")
         {

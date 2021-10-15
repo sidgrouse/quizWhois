@@ -26,5 +26,7 @@ namespace QuizWhois.Domain.Services.Implementations
             _context.SaveChanges();
             return new QuestionModel(entity.Id, entity.QuestionText, entity.CorrectAnswer);
         }
+
+        
     }
 }

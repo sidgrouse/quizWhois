@@ -1,3 +1,5 @@
+using JavaScriptEngineSwitcher.ChakraCore;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -5,14 +7,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using QuizWhois.Api.Hubs;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Services.Implementations;
 using QuizWhois.Domain.Services.Interfaces;
 using React.AspNet;
-using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
-using JavaScriptEngineSwitcher.ChakraCore;
-using QuizWhois.Api.Hubs;
-
 
 namespace QuizWhois.Api
 {
@@ -55,7 +54,6 @@ namespace QuizWhois.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

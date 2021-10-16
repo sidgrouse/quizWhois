@@ -8,6 +8,11 @@ using Microsoft.OpenApi.Models;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Services.Implementations;
 using QuizWhois.Domain.Services.Interfaces;
+using React.AspNet;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
+using JavaScriptEngineSwitcher.ChakraCore;
+using QuizWhois.Api.Hubs;
+
 
 namespace QuizWhois.Api
 {
@@ -23,6 +28,14 @@ namespace QuizWhois.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
+            services.AddSignalR();
+            services.AddMemoryCache();
+            services.AddHttpContextAccessor();
+            services.AddReact();
+            services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -34,6 +47,7 @@ namespace QuizWhois.Api
                 options.UseSqlServer(dbConnection));
 
             services.AddScoped<IQuestionService, QuestionService>();
+            services.AddScoped<IUserAnswerService, UserAnswerService>();
             services.AddScoped<IQuestionRatingService, QuestionRatingService>();
             services.AddScoped<IQuizService, QuizService>();
         }
@@ -41,11 +55,18 @@ namespace QuizWhois.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "QuizWhois.Api v1"));
+
+                app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true)
+                .AllowCredentials());
             }
 
             app.UseHttpsRedirection();
@@ -54,9 +75,14 @@ namespace QuizWhois.Api
 
             app.UseAuthorization();
 
+            app.UseReact(config => { });
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<QuestionHub>("/hub");
             });
         }
     }

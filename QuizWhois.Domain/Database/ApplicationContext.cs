@@ -7,8 +7,12 @@ namespace QuizWhois.Domain.Database
     public class ApplicationContext : DbContext
     {
         public DbSet<Question> Questions { get; set; }
+
         public DbSet<QuestionRating> QuestionRatings { get; set; }
+
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Quiz> Quizzes { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
@@ -22,10 +26,13 @@ namespace QuizWhois.Domain.Database
             modelBuilder.Entity<QuestionRating>(QuestionRatingConfigure);
             modelBuilder.Entity<User>(UserConfigure);
             modelBuilder.Entity<User>().HasData(
-                new User[] {
-                new User { Id = 1, Login = "Qwerty" },
-                new User { Id = 2, Login = "Asdfg" },
+                new User[]
+                {
+                    new User { Id = 1, Login = "Qwerty" },
+                    new User { Id = 2, Login = "Asdfg" },
                 });
+            modelBuilder.Entity<Quiz>().HasKey(q => q.Id);
+            modelBuilder.Entity<Quiz>().HasMany(x => x.Questions).WithOne();
         }
 
         public void QuestionConfigure(EntityTypeBuilder<Question> builder)

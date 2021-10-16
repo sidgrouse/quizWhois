@@ -7,10 +7,10 @@ using QuizWhois.Common.Models;
 
 namespace QuizWhois.Domain.Services.Interfaces
 {
-    public interface IUserAnswerService
+    public interface IQuizService
     {
-        public QuestionModel GetRandomQuestion();
+        public Task AddToQuiz(AddToSetModel[] addToSet);
 
-        public bool CheckAnswer(UserAnswerModel operationModel);
+        public Task<QuizModel> FormQuiz(List<long> question, string quizName = "");
     }
 }

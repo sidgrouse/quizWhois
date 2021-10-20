@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using QuizWhois.Common.Models;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Entity;
@@ -12,10 +13,12 @@ namespace QuizWhois.Domain.Services.Implementations
     public class QuizService : IQuizService
     {
         private readonly ApplicationContext _db;
+        private readonly ILogger<QuizService> _logger;
 
-        public QuizService(ApplicationContext context)
+        public QuizService(ApplicationContext context, ILogger<QuizService> logger)
         {
             _db = context;
+            _logger = logger;
         }
 
         public async Task<QuizModel> FormQuiz(List<long> questions, string quizName = "")
@@ -29,6 +32,7 @@ namespace QuizWhois.Domain.Services.Implementations
 
             await _db.AddAsync(quizToSave);
             await _db.SaveChangesAsync();
+            _logger.LogInformation($"Quiz id = {quizToSave.Id} was saved");
             return new QuizModel(quizToSave.Id, quizToSave.Questions.Select(x => x.Id), quizToSave.Name);
         }
 
@@ -40,6 +44,7 @@ namespace QuizWhois.Domain.Services.Implementations
             }
 
             this._db.SaveChanges();
+            _logger.LogInformation($"Quiz was updated");
         }
 
         private async Task<Quiz> QuizById(long quizId)

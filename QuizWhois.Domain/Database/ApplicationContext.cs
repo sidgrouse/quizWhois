@@ -9,6 +9,7 @@ namespace QuizWhois.Domain.Database
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionRating> QuestionRatings { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Hint> Hints { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
@@ -26,6 +27,7 @@ namespace QuizWhois.Domain.Database
                 new User { Id = 1, Login = "Qwerty" },
                 new User { Id = 2, Login = "Asdfg" },
                 });
+            modelBuilder.Entity<Hint>(HintConfigure);
         }
 
         public void QuestionConfigure(EntityTypeBuilder<Question> builder)
@@ -47,6 +49,11 @@ namespace QuizWhois.Domain.Database
         {
             builder.ToTable("User").HasKey(x => x.Id);
             builder.Property(x => x.Login).IsRequired().HasMaxLength(30);
+        }
+        public void HintConfigure(EntityTypeBuilder<Hint> builder)
+        {
+            builder.ToTable("Hint").HasKey(x => x.Id);
+            builder.Property(x => x.Text).IsRequired().HasMaxLength(255);
         }
     }
 }

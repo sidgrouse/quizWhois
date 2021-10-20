@@ -49,6 +49,7 @@ namespace QuizWhois.Api
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IUserAnswerService, UserAnswerService>();
             services.AddScoped<IQuestionRatingService, QuestionRatingService>();
+            services.AddScoped<IHintService, HintService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

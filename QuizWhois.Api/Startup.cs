@@ -6,8 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using QuizWhois.Api.Hubs;
+using QuizWhois.Common;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Services.Implementations;
 using QuizWhois.Domain.Services.Interfaces;
@@ -35,7 +37,10 @@ namespace QuizWhois.Api
             services.AddReact();
             services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
 
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(typeof(CustomExceptionFilter));
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "QuizWhois.Api", Version = "v1" });
@@ -49,6 +54,7 @@ namespace QuizWhois.Api
             services.AddScoped<IUserAnswerService, UserAnswerService>();
             services.AddScoped<IQuestionRatingService, QuestionRatingService>();
             services.AddScoped<IQuizService, QuizService>();
+            services.AddScoped<CustomExceptionFilter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

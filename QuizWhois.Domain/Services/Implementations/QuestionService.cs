@@ -25,12 +25,12 @@ namespace QuizWhois.Domain.Services.Implementations
             }
 
             var entity = new Question(operationModel.QuestionText, operationModel.CorrectAnswer);
-            await _context.Set<Question>().AddAsync(entity);
+            await _context.Questions.AddAsync(entity);
             await _context.SaveChangesAsync();
             return new QuestionModel(entity.Id, entity.QuestionText, entity.CorrectAnswer);
         }
 
-        public async Task AddMany(IEnumerable<QuestionModel> questionsToAdd)
+        public async Task CreateQuestions(IEnumerable<QuestionModel> questionsToAdd)
         {
             foreach (var question in questionsToAdd)
             {

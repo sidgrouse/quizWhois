@@ -1,9 +1,11 @@
-﻿namespace QuizWhois.Common.Models
+﻿using System.Collections.Generic;
+
+namespace QuizWhois.Common.Models
 {
     public class AddToSetModel
     {
         public long QuizId { get; set; }
 
-        public long QuestionId { get; set; }
+        public IEnumerable<long> QuestionIds { get; set; }
     }
 }

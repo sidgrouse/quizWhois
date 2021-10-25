@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
 namespace QuizWhois.Common
@@ -19,7 +19,7 @@ namespace QuizWhois.Common
 
         public void OnException(ExceptionContext filterContext)
         {
-            _logger.LogError($"{filterContext.Exception.Message}");
+            _logger.LogError($"{filterContext.Exception.Message}\n{filterContext.Exception.StackTrace}");
         }
     }
 }

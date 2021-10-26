@@ -38,13 +38,38 @@ namespace QuizWhois.Domain.Services.Implementations
 
         public async Task AddToQuiz(AddToSetModel[] addToSet)
         {
+            var mutableQuizIds = new List<long>();
+            var mutableQuestionIds = new List<long>();
             for (var i = 0; i < addToSet.Length; i++)
             {
                 await AddToQuiz(await QuizById(addToSet[i].QuizId), addToSet[i].QuestionId);
+                if (!mutableQuizIds.Contains(addToSet[i].QuizId))
+                {
+                    mutableQuizIds.Add(addToSet[i].QuizId);
+                }
+
+                if (!mutableQuestionIds.Contains(addToSet[i].QuestionId))
+                {
+                    mutableQuestionIds.Add(addToSet[i].QuestionId);
+                }
             }
 
             this._db.SaveChanges();
-            _logger.LogInformation($"Quiz was updated");
+            string messageToLog = "Questions with id ";
+
+            foreach (var quizId in mutableQuizIds)
+            {
+                messageToLog += $"{quizId} ";
+            }
+
+            messageToLog += "have been added to quizes with id";
+
+            foreach (var questionId in mutableQuestionIds)
+            {
+                messageToLog += $"{questionId} ";
+            }
+
+            _logger.LogInformation(messageToLog);
         }
 
         private async Task<Quiz> QuizById(long quizId)

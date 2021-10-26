@@ -23,7 +23,7 @@ namespace QuizWhois.Api.Controllers
         // [Authorize]
         [HttpPost("questions")]
         [ProducesResponseType(typeof(QuizModel), StatusCodes.Status200OK)]
-        public async Task<ActionResult> AddToSet([FromBody] AddToSetModel[] model)
+        public async Task<ActionResult> AddToSet([FromBody] AddToSetModel model)
         {
             await _quizService.AddToQuiz(model);
             return new OkResult();
@@ -34,7 +34,7 @@ namespace QuizWhois.Api.Controllers
         [ProducesResponseType(typeof(QuizModel), StatusCodes.Status200OK)]
         public async Task<ActionResult<QuizModel>> CreateSet(List<long> questions, string quizName = "")
         {
-            var formedQuiz = await _quizService.FormQuiz(questions, quizName);
+            var formedQuiz = await _quizService.CreateQuiz(questions, quizName);
             return formedQuiz;
         }
     }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using QuizWhois.Common.Models;
 using QuizWhois.Domain.Database;
@@ -12,87 +11,70 @@ namespace QuizWhois.Domain.Services.Implementations
 {
     public class QuizService : IQuizService
     {
-        private readonly ApplicationContext _db;
+        private readonly ApplicationContext _dbContext;
         private readonly ILogger<QuizService> _logger;
 
         public QuizService(ApplicationContext context, ILogger<QuizService> logger)
         {
-            _db = context;
+            _dbContext = context;
             _logger = logger;
         }
 
-        public async Task<QuizModel> FormQuiz(List<long> questions, string quizName = "")
+        public async Task<QuizModel> CreateQuiz(List<long> questionIds, string quizName = "")
         {
             var quizToSave = new Quiz(quizName);
-
-            foreach (var question in questions)
+            string questionIdsToLog = string.Empty;
+            foreach (var question in questionIds)
             {
-                await AddToQuiz(quizToSave, question);
+                await AddQuestionToQuiz(quizToSave, question);
+                questionIdsToLog += $"{question} ";
             }
 
-            await _db.AddAsync(quizToSave);
-            await _db.SaveChangesAsync();
-            _logger.LogInformation($"Quiz id = {quizToSave.Id} was saved");
-            return new QuizModel(quizToSave.Id, quizToSave.Questions.Select(x => x.Id), quizToSave.Name);
+            await _dbContext.AddAsync(quizToSave);
+            await _dbContext.SaveChangesAsync();
+            _logger.LogInformation($"Quiz id = {quizToSave.Id} was saved with question ids {questionIdsToLog}");
+            var questions = quizToSave.Questions.Select(q => new QuestionModel(q.Id, q.QuestionText, q.CorrectAnswer));
+            return new QuizModel(quizToSave.Id, questions, quizToSave.Name);
         }
 
-        public async Task AddToQuiz(AddToSetModel[] addToSet)
+        public async Task AddToQuiz(AddToSetModel addToSetModel)
         {
-            var mutableQuizIds = new List<long>();
-            var mutableQuestionIds = new List<long>();
-            for (var i = 0; i < addToSet.Length; i++)
+            var quiz = await QuizById(addToSetModel.QuizId);
+            foreach (var questionId in addToSetModel.QuestionIds)
             {
-                await AddToQuiz(await QuizById(addToSet[i].QuizId), addToSet[i].QuestionId);
-                if (!mutableQuizIds.Contains(addToSet[i].QuizId))
-                {
-                    mutableQuizIds.Add(addToSet[i].QuizId);
-                }
-
-                if (!mutableQuestionIds.Contains(addToSet[i].QuestionId))
-                {
-                    mutableQuestionIds.Add(addToSet[i].QuestionId);
-                }
+                await AddQuestionToQuiz(quiz, questionId);
             }
 
-            this._db.SaveChanges();
+            this._dbContext.SaveChanges();
+
             string messageToLog = "Questions with id ";
-
-            foreach (var quizId in mutableQuizIds)
-            {
-                messageToLog += $"{quizId} ";
-            }
-
-            messageToLog += "have been added to quizes with id";
-
-            foreach (var questionId in mutableQuestionIds)
+            foreach (var questionId in addToSetModel.QuestionIds)
             {
                 messageToLog += $"{questionId} ";
             }
 
+            messageToLog += $"have been added to quiz with id {quiz.Id}";
             _logger.LogInformation(messageToLog);
         }
 
         private async Task<Quiz> QuizById(long quizId)
         {            
-            var quiz = await _db.Set<Quiz>().FindAsync(quizId);                     
-            if (quiz == null)
-            {
-                throw new System.NullReferenceException("Quiz with given ID does not exist.");
-            }
-
+            var quiz = await _dbContext.Quizzes.FindAsync(quizId)
+                ?? throw new System.ArgumentException($"Quiz with ID {quizId} does not exist.");
+            
             return quiz;
         }
 
-        private async Task AddToQuiz(Quiz quiz, long question)
+        private async Task AddQuestionToQuiz(Quiz quiz, long question)
         {
-            var questionToAdd = await _db.Set<Question>().FindAsync(question);            
+            var questionToAdd = await _dbContext.Questions.FindAsync(question);            
             if (questionToAdd != null && quiz != null && !quiz.Questions.Contains(questionToAdd))
             {
                 quiz.Questions.Add(questionToAdd);
             }
             else if (questionToAdd == null)
             {
-                throw new System.NullReferenceException("Question with given ID does not exist.");
+                throw new System.ArgumentException("Question with given ID does not exist.");
             }            
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using QuizWhois.Common.Models;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Entity;
@@ -11,10 +12,12 @@ namespace QuizWhois.Domain.Services.Implementations
     public class QuestionService : IQuestionService
     {
         private readonly ApplicationContext _context;
+        private readonly ILogger<QuestionService> _logger;
 
-        public QuestionService(ApplicationContext context)
+        public QuestionService(ApplicationContext context, ILogger<QuestionService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<QuestionModel> AddQuestion(QuestionModel operationModel)
@@ -27,6 +30,7 @@ namespace QuizWhois.Domain.Services.Implementations
             var entity = new Question(operationModel.QuestionText, operationModel.CorrectAnswer);
             await _context.Questions.AddAsync(entity);
             await _context.SaveChangesAsync();
+            _logger.LogInformation($"Question id = {entity.Id} was added");
             return new QuestionModel(entity.Id, entity.QuestionText, entity.CorrectAnswer);
         }
 

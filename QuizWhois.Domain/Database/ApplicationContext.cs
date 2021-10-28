@@ -14,6 +14,8 @@ namespace QuizWhois.Domain.Database
 
         public DbSet<Quiz> Quizzes { get; set; }
 
+        public DbSet<Hint> Hints { get; set; }
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {
@@ -33,6 +35,7 @@ namespace QuizWhois.Domain.Database
                 });
             modelBuilder.Entity<Quiz>().HasKey(q => q.Id);
             modelBuilder.Entity<Quiz>().HasMany(x => x.Questions).WithOne();
+            modelBuilder.Entity<Hint>(HintConfigure);
         }
 
         public void QuestionConfigure(EntityTypeBuilder<Question> builder)
@@ -54,6 +57,13 @@ namespace QuizWhois.Domain.Database
         {
             builder.ToTable("User").HasKey(x => x.Id);
             builder.Property(x => x.Login).IsRequired().HasMaxLength(30);
+        }
+
+        public void HintConfigure(EntityTypeBuilder<Hint> builder)
+        {
+            builder.ToTable("Hint").HasKey(x => x.Id);
+            builder.Property(x => x.Text).IsRequired().HasMaxLength(255);
+            builder.HasOne(p => p.Question).WithMany(t => t.Hints);
         }
     }
 }

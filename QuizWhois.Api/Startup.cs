@@ -55,6 +55,7 @@ namespace QuizWhois.Api
             services.AddScoped<IQuestionRatingService, QuestionRatingService>();
             services.AddScoped<IQuizService, QuizService>();
             services.AddScoped<CustomExceptionFilter>();
+            services.AddScoped<IHintService, HintService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,7 +1,10 @@
+
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,7 +46,23 @@ namespace QuizWhois.Api
 
             string dbConnection = Configuration.GetConnectionString("QuestionDb");
             services.AddDbContext<ApplicationContext>(options =>
-                options.UseSqlServer(dbConnection));
+                options.UseSqlServer(dbConnection));            
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+       
+    });
+
+            services.AddAuthentication()
+        .AddGoogle(options =>
+        {
+            IConfigurationSection googleAuthNSection =
+                Configuration.GetSection("Authentication:Google");
+
+            options.ClientId = googleAuthNSection["ClientId"];
+            options.ClientSecret = googleAuthNSection["ClientSecret"];
+        });
 
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IUserAnswerService, UserAnswerService>();
@@ -70,7 +89,8 @@ namespace QuizWhois.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseReact(config => { });

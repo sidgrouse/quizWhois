@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using QuizWhois.Common.Models;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Entity;
@@ -10,10 +11,12 @@ namespace QuizWhois.Domain.Services.Implementations
     public class QuestionRatingService : IQuestionRatingService
     {
         private readonly ApplicationContext _context;
+        private readonly ILogger<QuestionRatingService> _logger;
 
-        public QuestionRatingService(ApplicationContext context)
+        public QuestionRatingService(ApplicationContext context, ILogger<QuestionRatingService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public double GetAverageRating(long questionId)
@@ -47,6 +50,7 @@ namespace QuizWhois.Domain.Services.Implementations
             var entity = new QuestionRating(questionModelId, userId, rating);
             _context.Set<QuestionRating>().Add(entity);
             _context.SaveChanges();
+            _logger.LogInformation($"QuestionRating id = {entity.Id}, questionId = {entity.QuestionId}, userId = {entity.UserId} was added");
             return new QuestionRatingModel(entity.Id, entity.QuestionId, entity.UserId, entity.Value);
         }
 
@@ -71,6 +75,7 @@ namespace QuizWhois.Domain.Services.Implementations
             entity.Value = rating;
             _context.Set<QuestionRating>().Update(entity);
             _context.SaveChanges();
+            _logger.LogInformation($"QuestionRating id = {entity.Id}, questionId = {entity.QuestionId}, userId = {entity.UserId} was updated");
             return new QuestionRatingModel(entity.Id, entity.QuestionId, entity.UserId, entity.Value);
         }
 
@@ -89,6 +94,7 @@ namespace QuizWhois.Domain.Services.Implementations
 
             _context.Set<QuestionRating>().Remove(entity);
             _context.SaveChanges();
+            _logger.LogInformation($"QuestionRating id = {entity.Id}, questionId = {entity.QuestionId}, userId = {entity.UserId} was deleted");
             return true;
         }
     }

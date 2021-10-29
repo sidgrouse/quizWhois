@@ -8,16 +8,16 @@ namespace QuizWhois.Common.Models
 {
     public class QuizModel
     {
-        public QuizModel(long id, IEnumerable<long> questions, string name = "")
+        public QuizModel(long id, IEnumerable<QuestionModel> questions, string name)
         {
             Id = id;
-            Questions = questions.ToList();
-            Name = string.IsNullOrEmpty(name) ? id.ToString() : name;
+            Questions = questions;
+            Name = name;
         }
 
         public long Id { get; set; }
 
-        public List<long> Questions { get; set; } = new List<long>();
+        public IEnumerable<QuestionModel> Questions { get; set; }
 
         public string Name { get; set; }
     }

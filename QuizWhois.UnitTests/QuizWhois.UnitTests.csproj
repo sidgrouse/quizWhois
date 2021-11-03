@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-      <CodeAnalysisRuleSet>$(SolutionDir)\tests.analyzers.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>../tests.analyzers.ruleset</CodeAnalysisRuleSet>
       <IsPackable>false</IsPackable>
   </PropertyGroup>
 

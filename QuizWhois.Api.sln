@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizWhois.Api", "QuizWhois.Api.csproj", "{F2577596-7AED-42D5-A985-CA200480B2E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizWhois.Api", "QuizWhois.Api\QuizWhois.Api.csproj", "{F2577596-7AED-42D5-A985-CA200480B2E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizWhois.Common", "..\QuizWhois.Common\QuizWhois.Common.csproj", "{3B35739B-9502-4D51-AF3D-8363CEA3E061}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizWhois.Common", "QuizWhois.Common\QuizWhois.Common.csproj", "{3B35739B-9502-4D51-AF3D-8363CEA3E061}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizWhois.Domain", "..\QuizWhois.Domain\QuizWhois.Domain.csproj", "{0E84D34C-913F-44DA-BFF9-E600B1F09BD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizWhois.Domain", "QuizWhois.Domain\QuizWhois.Domain.csproj", "{0E84D34C-913F-44DA-BFF9-E600B1F09BD0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizWhois.UnitTests", "..\QuizWhois.UnitTests\QuizWhois.UnitTests.csproj", "{ADFD144C-2961-4C06-9C3E-E47EC84FA124}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizWhois.UnitTests", "QuizWhois.UnitTests\QuizWhois.UnitTests.csproj", "{ADFD144C-2961-4C06-9C3E-E47EC84FA124}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

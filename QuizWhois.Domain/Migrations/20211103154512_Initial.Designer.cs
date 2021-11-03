@@ -10,8 +10,8 @@ using QuizWhois.Domain.Database;
 namespace QuizWhois.Domain.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20211028152918_Hint")]
-    partial class Hint
+    [Migration("20211103154512_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

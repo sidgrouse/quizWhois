@@ -2,7 +2,7 @@
 {
     public class HintModel
     {
-        public long Id { get; set; }
+        public long Id { get; }
 
         public long QuestionId { get; set; }
 

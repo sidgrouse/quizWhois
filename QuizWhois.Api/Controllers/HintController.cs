@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QuizWhois.Common.Models;
 using QuizWhois.Domain.Services.Interfaces;
@@ -6,7 +7,7 @@ using QuizWhois.Domain.Services.Interfaces;
 namespace QuizWhois.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("hint")]
     public class HintController : Controller
     {
         private readonly IHintService _hintService;
@@ -19,10 +20,10 @@ namespace QuizWhois.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<HintModel> Post(long questionId, string text)
+        public Task<HintModel> Post(long questionId, string text)
         {
             var addedHint = _hintService.AddHint(questionId, text);
-            return Ok(addedHint);
+            return addedHint;
         }
     }
 }

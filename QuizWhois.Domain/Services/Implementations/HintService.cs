@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using QuizWhois.Common.Models;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Entity;
@@ -8,23 +9,23 @@ namespace QuizWhois.Domain.Services.Implementations
 {
     public class HintService : IHintService
     {
-        public ApplicationContext Context { get; set; }
+        private ApplicationContext Context { get; set; }
 
         public HintService(ApplicationContext context)
         {
             Context = context;
         }
 
-        public HintModel AddHint(long questionId, string text)
+        public async Task<HintModel> AddHint(long questionId, string text)
         {
             if (questionId <= 0 || text is null || text == string.Empty)
             {
-                throw new ArgumentNullException("hintModel in HintService.AddHint was null");
+                throw new ArgumentException("hintModel in HintService.AddHint was null");
             }
 
             var entity = new Hint(questionId, text);
             Context.Set<Hint>().Add(entity);
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
             return new HintModel(entity.Id, entity.QuestionId, entity.Text);
         }
     }

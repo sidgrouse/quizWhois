@@ -49,25 +49,11 @@ namespace QuizWhois.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "QuizWhois.Api", Version = "v1" });
             });
 
-            string dbConnection = Configuration.GetConnectionString("QuestionDb");
+            string dbConnectionString = Configuration.GetConnectionString("QuizWhoisDb");
             services.AddDbContext<ApplicationContext>(options =>
-                options.UseSqlServer(dbConnection));            
-
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-       
-    });
-
-            services.AddAuthentication()
-        .AddGoogle(options =>
-        {
-            IConfigurationSection googleAuthNSection =
-                Configuration.GetSection("Authentication:Google");
-
-            options.ClientId = googleAuthNSection["ClientId"];
-            options.ClientSecret = googleAuthNSection["ClientSecret"];
-        });
+                options.UseMySql(
+                dbConnectionString,
+                new MySqlServerVersion(new System.Version(8, 0, 27))));
 
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IUserAnswerService, UserAnswerService>();

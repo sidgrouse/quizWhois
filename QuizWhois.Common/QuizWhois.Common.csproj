@@ -5,7 +5,8 @@
   </PropertyGroup>
 	
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <CodeAnalysisRuleSet>$(SolutionDir)\tests.analyzers.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>../tests.analyzers.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	</PropertyGroup>
 	
   <ItemGroup>

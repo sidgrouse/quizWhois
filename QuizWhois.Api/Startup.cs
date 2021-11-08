@@ -36,7 +36,6 @@ namespace QuizWhois.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-
             services.AddSignalR();
             services.AddMemoryCache();
             services.AddHttpContextAccessor();

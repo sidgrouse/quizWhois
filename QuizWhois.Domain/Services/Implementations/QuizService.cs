@@ -66,17 +66,28 @@ namespace QuizWhois.Domain.Services.Implementations
                 throw new Exception("Id was invalid number");
             }
 
-            var entityQuiz = _dbContext.Set<Quiz>().FirstOrDefault(x => x.Id == quizId);
+            var entity = _dbContext.Quizzes.Select(x => new
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Questions = x.Questions.Select(y => new Question
+                {
+                    Id = y.Id,
+                    QuizId = y.QuizId,
+                    QuestionText = y.QuestionText,
+                    CorrectAnswers = y.CorrectAnswers.ToList()
+                }).ToList()
+            }).FirstOrDefault(x => x.Id == quizId);
+
             var questionModels = new List<QuestionModel>();
-            var entityQuestion = _dbContext.Set<Question>().Where(x => x.QuizId == quizId);
-            entityQuestion.ToList().ForEach(x =>
+            entity.Questions.ForEach(x =>
             {
                 var correctAnswers = new List<string>();
                 var entityAnswers = _dbContext.Set<CorrectAnswer>().Where(y => y.QuestionId == x.Id);
                 entityAnswers.ToList().ForEach(y => correctAnswers.Add(y.AnswerText));
                 questionModels.Add(new QuestionModel(x.Id, x.QuestionText, correctAnswers));
             });
-            return new QuizModel(entityQuiz.Id, questionModels, entityQuiz.Name);
+            return new QuizModel(entity.Id, questionModels, entity.Name);
         }
 
         private async Task<Quiz> QuizById(long quizId)

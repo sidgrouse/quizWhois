@@ -46,11 +46,16 @@ namespace QuizWhois.Domain.Services.Implementations
                 throw new Exception("Id was invalid number");
             }
 
-            var entity = _context.Set<Question>().FirstOrDefault(x => x.Id == questionId);
-            var entityAnswers = _context.Set<CorrectAnswer>().Where(x => x.QuestionId == questionId);
+            var entity = _context.Questions.Select(x => new
+                {
+                    id = x.Id,
+                    questionText = x.QuestionText,
+                    correctAnswers = x.CorrectAnswers
+                }).FirstOrDefault(x => x.id == questionId);
+
             var correctAnswers = new List<string>();
-            entityAnswers.ToList().ForEach(x => correctAnswers.Add(x.AnswerText));
-            return new QuestionModel(entity.Id, entity.QuestionText, correctAnswers);
+            entity.correctAnswers.ToList().ForEach(x => correctAnswers.Add(x.AnswerText));
+            return new QuestionModel(entity.id, entity.questionText, correctAnswers);
         }
 
         public async Task CreateQuestions(IEnumerable<QuestionModel> questionsToAdd)

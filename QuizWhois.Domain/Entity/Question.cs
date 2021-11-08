@@ -1,4 +1,6 @@
-﻿namespace QuizWhois.Domain.Entity
+﻿using System.Collections.Generic;
+
+namespace QuizWhois.Domain.Entity
 {
     public class Question
     {
@@ -6,12 +8,12 @@
 
         public string QuestionText { get; set; }
 
-        public string CorrectAnswer { get; set; }
+        public List<CorrectAnswer> CorrectAnswers { get; set; } = new List<CorrectAnswer>();
 
-        public Question(string questionText, string correctAnswer)
+        public Question(string questionText, List<string> correctAnswers)
         {
             QuestionText = questionText;
-            CorrectAnswer = correctAnswer;
+            correctAnswers.ForEach(x => CorrectAnswers.Add(new CorrectAnswer(x)));
         }
     }
 }

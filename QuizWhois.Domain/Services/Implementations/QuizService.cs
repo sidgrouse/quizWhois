@@ -33,7 +33,8 @@ namespace QuizWhois.Domain.Services.Implementations
             await _dbContext.AddAsync(quizToSave);
             await _dbContext.SaveChangesAsync();
             _logger.LogInformation($"Quiz id = {quizToSave.Id} was saved with question ids {questionIdsToLog}");
-            var questions = quizToSave.Questions.Select(q => new QuestionModel(q.Id, q.QuestionText, q.CorrectAnswer));
+            var questions = quizToSave.Questions.Select(q => 
+                new QuestionModel(q.Id, q.QuestionText, q.CorrectAnswers.Select(x => x.AnswerText).ToList()));
             return new QuizModel(quizToSave.Id, questions, quizToSave.Name);
         }
 

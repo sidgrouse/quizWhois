@@ -8,12 +8,8 @@ namespace QuizWhois.Domain.Entity
 
         public string QuestionText { get; set; }
 
-        public List<CorrectAnswer> CorrectAnswers { get; set; } = new List<CorrectAnswer>();
+        public List<CorrectAnswer> CorrectAnswers { get; set; }
 
-        public Question(string questionText, List<string> correctAnswers)
-        {
-            QuestionText = questionText;
-            correctAnswers.ForEach(x => CorrectAnswers.Add(new CorrectAnswer(x)));
-        }
+        public long QuizId { get; set; }
     }
 }

@@ -8,6 +8,8 @@ namespace QuizWhois.Domain.Database
     {
         public DbSet<Question> Questions { get; set; }
 
+        public DbSet<CorrectAnswer> CorrectAnswers { get; set; }
+
         public DbSet<QuestionRating> QuestionRatings { get; set; }
 
         public DbSet<User> Users { get; set; }
@@ -40,7 +42,6 @@ namespace QuizWhois.Domain.Database
         {
             builder.ToTable("Question").HasKey(x => x.Id);
             builder.Property(x => x.QuestionText).IsRequired().HasMaxLength(255);
-            builder.Property(x => x.CorrectAnswers).IsRequired().HasMaxLength(255);
         }
 
         public void QuestionRatingConfigure(EntityTypeBuilder<QuestionRating> builder)

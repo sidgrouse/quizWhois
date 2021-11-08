@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -56,6 +57,26 @@ namespace QuizWhois.Domain.Services.Implementations
 
             messageToLog += $"have been added to quiz with id {quiz.Id}";
             _logger.LogInformation(messageToLog);
+        }
+
+        public QuizModel GetQuiz(long quizId)
+        {
+            if (quizId <= 0)
+            {
+                throw new Exception("Id was invalid number");
+            }
+
+            var entityQuiz = _dbContext.Set<Quiz>().FirstOrDefault(x => x.Id == quizId);
+            var questionModels = new List<QuestionModel>();
+            var entityQuestion = _dbContext.Set<Question>().Where(x => x.QuizId == quizId);
+            entityQuestion.ToList().ForEach(x =>
+            {
+                var correctAnswers = new List<string>();
+                var entityAnswers = _dbContext.Set<CorrectAnswer>().Where(y => y.QuestionId == x.Id);
+                entityAnswers.ToList().ForEach(y => correctAnswers.Add(y.AnswerText));
+                questionModels.Add(new QuestionModel(x.Id, x.QuestionText, correctAnswers));
+            });
+            return new QuizModel(entityQuiz.Id, questionModels, entityQuiz.Name);
         }
 
         private async Task<Quiz> QuizById(long quizId)

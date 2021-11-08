@@ -39,7 +39,7 @@ namespace QuizWhois.Api.Controllers
         }
 
         [HttpPost("{questionId}/rating")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(QuestionRatingModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<QuestionRatingModel> Post(long questionId, QuestionRatingRequest request)
         {
@@ -48,7 +48,7 @@ namespace QuizWhois.Api.Controllers
         }
 
         [HttpPut("{questionId}/rating")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(QuestionRatingModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<QuestionRatingModel> Update(long questionId, QuestionRatingRequest request)
         {
@@ -66,7 +66,7 @@ namespace QuizWhois.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(double), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("{questionId}/average")]
         public ActionResult<double> GetAverage(long questionId)

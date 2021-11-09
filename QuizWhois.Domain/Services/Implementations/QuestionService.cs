@@ -46,12 +46,12 @@ namespace QuizWhois.Domain.Services.Implementations
                 throw new Exception("Id was invalid number");
             }
 
-            var entity = _context.Questions.Select(x => new
+            var entity = _context.Questions.Where(x => x.Id == questionId).Select(x => new
                 {
                     id = x.Id,
                     questionText = x.QuestionText,
                     correctAnswers = x.CorrectAnswers
-                }).FirstOrDefault(x => x.id == questionId);
+                }).FirstOrDefault();
 
             var correctAnswers = new List<string>();
             entity.correctAnswers.ToList().ForEach(x => correctAnswers.Add(x.AnswerText));

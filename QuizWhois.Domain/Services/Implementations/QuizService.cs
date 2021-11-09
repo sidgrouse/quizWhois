@@ -66,7 +66,7 @@ namespace QuizWhois.Domain.Services.Implementations
                 throw new Exception("Id was invalid number");
             }
 
-            var entity = _dbContext.Quizzes.Select(x => new
+            var entity = _dbContext.Quizzes.Where(x => x.Id == quizId).Select(x => new
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -77,7 +77,7 @@ namespace QuizWhois.Domain.Services.Implementations
                     QuestionText = y.QuestionText,
                     CorrectAnswers = y.CorrectAnswers.ToList()
                 }).ToList()
-            }).FirstOrDefault(x => x.Id == quizId);
+            }).FirstOrDefault();
 
             var questionModels = new List<QuestionModel>();
             entity.Questions.ForEach(x =>

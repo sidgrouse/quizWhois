@@ -349,3 +349,4 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 QuizWhois.Api/client_secret_*apps.googleusercontent.com.json
+appsettings.*.local.json

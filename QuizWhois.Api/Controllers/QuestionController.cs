@@ -30,7 +30,7 @@ namespace QuizWhois.Api.Controllers
             return Ok();
         }
 
-        [HttpGet]
+        [HttpGet("{questionId}")]
         [ProducesResponseType(typeof(QuestionModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<QuestionModel> GetQuestion(long questionId)

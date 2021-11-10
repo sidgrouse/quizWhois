@@ -39,7 +39,7 @@ namespace QuizWhois.Api.Controllers
         }
 
         // [Authorize]
-        [HttpGet]
+        [HttpGet("{quizid}")]
         [ProducesResponseType(typeof(QuizModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<QuizModel> GetSet(long quizId)

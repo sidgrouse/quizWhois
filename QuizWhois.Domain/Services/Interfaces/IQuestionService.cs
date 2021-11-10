@@ -8,6 +8,8 @@ namespace QuizWhois.Domain.Services.Interfaces
     {
         public Task<QuestionModel> AddQuestion(QuestionModel operationModel);
 
+        public QuestionModel GetQuestion(long questionId);
+
         public Task CreateQuestions(IEnumerable<QuestionModel> questionsToAdd);
     }
 }

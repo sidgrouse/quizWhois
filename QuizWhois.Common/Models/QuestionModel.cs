@@ -1,4 +1,6 @@
-﻿namespace QuizWhois.Common.Models
+﻿using System.Collections.Generic;
+
+namespace QuizWhois.Common.Models
 {
     public class QuestionModel
     {
@@ -6,13 +8,13 @@
 
         public string QuestionText { get; set; }
 
-        public string CorrectAnswer { get; set; }
+        public List<string> CorrectAnswers { get; set; }
 
-        public QuestionModel(long id, string questionText, string correctAnswer)
+        public QuestionModel(long id, string questionText, List<string> correctAnswers)
         {
             Id = id;
             QuestionText = questionText;
-            CorrectAnswer = correctAnswer;
+            CorrectAnswers = correctAnswers;
         }
     }
 }

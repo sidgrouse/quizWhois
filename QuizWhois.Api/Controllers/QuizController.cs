@@ -37,5 +37,14 @@ namespace QuizWhois.Api.Controllers
             var formedQuiz = await _quizService.CreateQuiz(questions, quizName);
             return formedQuiz;
         }
+
+        // [Authorize]
+        [HttpGet("{quizid}")]
+        [ProducesResponseType(typeof(QuizModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<QuizModel> GetSet(long quizId)
+        {
+            return _quizService.GetQuiz(quizId);
+        }
     }
 }

@@ -8,6 +8,8 @@ namespace QuizWhois.Domain.Database
     {
         public DbSet<Question> Questions { get; set; }
 
+        public DbSet<CorrectAnswer> CorrectAnswers { get; set; }
+
         public DbSet<QuestionRating> QuestionRatings { get; set; }
 
         public DbSet<User> Users { get; set; }
@@ -24,6 +26,7 @@ namespace QuizWhois.Domain.Database
         {
             modelBuilder.Entity<Question>(QuestionConfigure);
             modelBuilder.Entity<QuestionRating>(QuestionRatingConfigure);
+            modelBuilder.Entity<CorrectAnswer>(CorrectAnswerConfigure);
             modelBuilder.Entity<User>(UserConfigure);
             modelBuilder.Entity<User>().HasData(
                 new User[]
@@ -39,7 +42,6 @@ namespace QuizWhois.Domain.Database
         {
             builder.ToTable("Question").HasKey(x => x.Id);
             builder.Property(x => x.QuestionText).IsRequired().HasMaxLength(255);
-            builder.Property(x => x.CorrectAnswer).IsRequired().HasMaxLength(255);
         }
 
         public void QuestionRatingConfigure(EntityTypeBuilder<QuestionRating> builder)
@@ -48,6 +50,13 @@ namespace QuizWhois.Domain.Database
             builder.Property(x => x.Value).IsRequired();
             builder.Property(x => x.QuestionId).IsRequired();
             builder.Property(x => x.UserId).IsRequired();
+        }
+
+        public void CorrectAnswerConfigure(EntityTypeBuilder<CorrectAnswer> builder)
+        {
+            builder.ToTable("CorrectAnswer").HasKey(x => x.Id);
+            builder.Property(x => x.AnswerText).IsRequired();
+            builder.Property(x => x.QuestionId).IsRequired();
         }
 
         public void UserConfigure(EntityTypeBuilder<User> builder)

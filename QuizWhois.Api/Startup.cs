@@ -15,6 +15,7 @@ using Microsoft.OpenApi.Models;
 using QuizWhois.Api.Hubs;
 using QuizWhois.Common;
 using QuizWhois.Domain.Database;
+using QuizWhois.Domain.Middleware;
 using QuizWhois.Domain.Services.Implementations;
 using QuizWhois.Domain.Services.Interfaces;
 using React.AspNet;
@@ -95,6 +96,7 @@ namespace QuizWhois.Api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
+                app.UseSwaggerAuthorized();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "QuizWhois.Api v1"));
 
                 app.UseCors(x => x

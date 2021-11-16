@@ -36,6 +36,13 @@ namespace QuizWhois.Api.Controllers
         }
 
         [Authorize]
+        [HttpGet("login")]
+        public IActionResult LogIn()
+        {           
+            return Ok("Success LogIn");
+        }
+
+        [Authorize]
         [HttpGet("scopes")]
         public async Task<ActionResult<List<string>>> ScopeListing([FromServices] IGoogleAuthProvider auth)
         {
@@ -50,15 +57,15 @@ namespace QuizWhois.Api.Controllers
             // The user is already authenticated, so this call won't trigger authentication.
             // But it allows us to access the AuthenticateResult object that we can inspect
             // to obtain token related values.
-            AuthenticateResult auth = await HttpContext.AuthenticateAsync();
-            string idToken = auth.Properties.GetTokenValue(OpenIdConnectParameterNames.IdToken);
+            AuthenticateResult authResult = await HttpContext.AuthenticateAsync();
+            string idToken = authResult.Properties.GetTokenValue(OpenIdConnectParameterNames.IdToken);
             string idTokenValid, idTokenIssued, idTokenExpires;
             try
             {
                 var payload = await GoogleJsonWebSignature.ValidateAsync(idToken);
                 idTokenValid = "true";
-                idTokenIssued = new DateTime(1970, 1, 1).AddSeconds(payload.IssuedAtTimeSeconds.Value).ToString();
-                idTokenExpires = new DateTime(1970, 1, 1).AddSeconds(payload.ExpirationTimeSeconds.Value).ToString();
+                idTokenIssued = DateTimeOffset.FromUnixTimeSeconds(payload.IssuedAtTimeSeconds.Value).DateTime.ToString();
+                idTokenExpires = DateTimeOffset.FromUnixTimeSeconds(payload.ExpirationTimeSeconds.Value).DateTime.ToString();
             }
             catch (Exception e)
             {
@@ -67,11 +74,11 @@ namespace QuizWhois.Api.Controllers
                 idTokenExpires = "invalid";
             }
 
-            string accessToken = auth.Properties.GetTokenValue(OpenIdConnectParameterNames.AccessToken);
-            string refreshToken = auth.Properties.GetTokenValue(OpenIdConnectParameterNames.RefreshToken);
-            string accessTokenExpiresAt = auth.Properties.GetTokenValue("expires_at");
-            string cookieIssuedUtc = auth.Properties.IssuedUtc?.ToString() ?? "<missing>";
-            string cookieExpiresUtc = auth.Properties.ExpiresUtc?.ToString() ?? "<missing>";
+            string accessToken = authResult.Properties.GetTokenValue(OpenIdConnectParameterNames.AccessToken);
+            string refreshToken = authResult.Properties.GetTokenValue(OpenIdConnectParameterNames.RefreshToken);
+            string accessTokenExpiresAt = authResult.Properties.GetTokenValue("expires_at");
+            string cookieIssuedUtc = authResult.Properties.IssuedUtc?.ToString() ?? "<missing>";
+            string cookieExpiresUtc = authResult.Properties.ExpiresUtc?.ToString() ?? "<missing>";
 
             var result = new StringBuilder();
             result.AppendLine($"Id Token: '{idToken}'");

@@ -96,7 +96,8 @@ namespace QuizWhois.Api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerAuthorized();
+
+                // app.UseSwaggerAuthorized();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "QuizWhois.Api v1"));
 
                 app.UseCors(x => x

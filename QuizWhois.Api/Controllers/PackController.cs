@@ -21,18 +21,9 @@ namespace QuizWhois.Api.Controllers
         }
 
         // [Authorize]
-        [HttpPost("questions")]
-        [ProducesResponseType(typeof(PackModel), StatusCodes.Status200OK)]
-        public async Task<ActionResult> AddToSet([FromBody] AddToSetModel model)
-        {
-            await _packService.AddToPack(model);
-            return new OkResult();
-        }
-
-        // [Authorize]
         [HttpPost]
-        [ProducesResponseType(typeof(PackModel), StatusCodes.Status200OK)]
-        public async Task<ActionResult<PackModel>> CreatePack(PackModel packModel)
+        [ProducesResponseType(typeof(PackModelResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult<PackModelResponse>> CreatePack(PackModelRequest packModel)
         {
             var formedPack = await _packService.CreatePack(packModel);
             return formedPack;
@@ -40,18 +31,18 @@ namespace QuizWhois.Api.Controllers
 
         // [Authorize]
         [HttpGet("{packId}")]
-        [ProducesResponseType(typeof(PackModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PackModelResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<PackModel> GetPack(long packId)
+        public ActionResult<PackModelResponse> GetPack(long packId)
         {
             return _packService.GetPack(packId);
         }
 
         // [Authorize]
         [HttpPut("{packId}")]
-        [ProducesResponseType(typeof(PackModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PackModelResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> UpdatePack(PackModel packModel, long packId)
+        public async Task<ActionResult> UpdatePack(PackModelRequest packModel, long packId)
         {
             await _packService.UpdatePack(packModel, packId);
             return Ok();
@@ -59,7 +50,7 @@ namespace QuizWhois.Api.Controllers
 
         // [Authorize]
         [HttpDelete("{packId}")]
-        [ProducesResponseType(typeof(PackModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PackModelResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> DeletePack(long packId)
         {

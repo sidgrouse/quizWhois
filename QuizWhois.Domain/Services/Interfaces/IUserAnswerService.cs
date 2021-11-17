@@ -9,7 +9,7 @@ namespace QuizWhois.Domain.Services.Interfaces
 {
     public interface IUserAnswerService
     {
-        public QuestionModel GetRandomQuestion();
+        public QuestionModelResponse GetRandomQuestion();
 
         public bool CheckAnswer(UserAnswerModel operationModel);
     }

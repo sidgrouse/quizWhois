@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace QuizWhois.Common.Models
 {
-    public class PackModel
+    public class PackModelResponse
     {
-        public PackModel(long id, string name, string description, bool? isDraft)
+        public PackModelResponse(long id, string name, string description, bool? isDraft)
         {
             Id = id;
             Name = name;
@@ -18,7 +18,7 @@ namespace QuizWhois.Common.Models
 
         public long Id { get; set; }
 
-        public IEnumerable<QuestionModel> Questions { get; set; }
+        public IEnumerable<QuestionModelResponse> Questions { get; set; }
 
         public string Name { get; set; }
 

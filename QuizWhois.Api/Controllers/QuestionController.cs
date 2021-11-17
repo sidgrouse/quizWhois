@@ -24,16 +24,16 @@ namespace QuizWhois.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> CreateQuestions(List<QuestionModel> questions)
+        public async Task<ActionResult> CreateQuestions(List<QuestionModelRequest> questions)
         {
             await _questionService.CreateQuestions(questions);
             return Ok();
         }
 
         [HttpGet("{questionId}")]
-        [ProducesResponseType(typeof(QuestionModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(QuestionModelResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<QuestionModel> GetQuestion(long questionId)
+        public ActionResult<QuestionModelResponse> GetQuestion(long questionId)
         {
             return _questionService.GetQuestion(questionId);
         }
@@ -41,7 +41,7 @@ namespace QuizWhois.Api.Controllers
         [HttpPut("{questionId}")]
         [ProducesResponseType(typeof(QuestionRatingModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Update(QuestionModel questionModel, long questionId)
+        public async Task<ActionResult> Update(QuestionModelRequest questionModel, long questionId)
         {
             await _questionService.UpdateQuestion(questionModel, questionId);
             return Ok();

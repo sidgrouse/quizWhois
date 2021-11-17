@@ -21,7 +21,7 @@ namespace QuizWhois.Domain.Services.Implementations
             _logger = logger;
         }
 
-        public async Task<QuestionModel> AddQuestion(QuestionModel questionModel)
+        public async Task<QuestionModelResponse> AddQuestion(QuestionModelRequest questionModel)
         {
             if (questionModel == null || questionModel.QuestionText == string.Empty || questionModel.CorrectAnswers.Count == 0)
             {
@@ -36,10 +36,10 @@ namespace QuizWhois.Domain.Services.Implementations
             _logger.LogInformation($"Question id = {entity.Id} was added");
             var correctAnswersToModel = new List<string>();
             result.Entity.CorrectAnswers.ForEach(x => correctAnswersToModel.Add(x.AnswerText));
-            return new QuestionModel(result.Entity.Id, result.Entity.QuestionText, correctAnswersToModel, result.Entity.PackId);
+            return new QuestionModelResponse(result.Entity.Id, result.Entity.QuestionText, correctAnswersToModel, result.Entity.PackId);
         }
 
-        public QuestionModel GetQuestion(long questionId)
+        public QuestionModelResponse GetQuestion(long questionId)
         {
             if (questionId <= 0)
             {
@@ -56,10 +56,10 @@ namespace QuizWhois.Domain.Services.Implementations
 
             var correctAnswers = new List<string>();
             entity.correctAnswers.ToList().ForEach(x => correctAnswers.Add(x.AnswerText));
-            return new QuestionModel(entity.id, entity.questionText, correctAnswers, entity.packId);
+            return new QuestionModelResponse(entity.id, entity.questionText, correctAnswers, entity.packId);
         }
 
-        public async Task UpdateQuestion(QuestionModel questionModel, long questionId)
+        public async Task UpdateQuestion(QuestionModelRequest questionModel, long questionId)
         {
             if (questionId <= 0)
             {
@@ -83,15 +83,12 @@ namespace QuizWhois.Domain.Services.Implementations
                 entity.QuestionText = questionModel.QuestionText;
             }
 
-            if (questionModel.CorrectAnswers.Count != 0)
+            if (questionModel.CorrectAnswers != null && questionModel.CorrectAnswers.Count != 0)
             {
-                if (entity.CorrectAnswers.Count != 0)
-                {
-                    _context.Set<CorrectAnswer>().Where(x => x.QuestionId == questionModel.Id).ToList()
-                        .ForEach(x => _context.Set<CorrectAnswer>().Remove(x));
-                }
-
-                questionModel.CorrectAnswers.ForEach(x => _context.Set<CorrectAnswer>().Add(new CorrectAnswer(x)));
+                _context.Set<CorrectAnswer>().RemoveRange(entity.CorrectAnswers);
+                entity.CorrectAnswers.Clear();
+                questionModel.CorrectAnswers.ForEach(x => entity.CorrectAnswers.Add(new CorrectAnswer(x)));
+                _context.Set<CorrectAnswer>().AddRange(entity.CorrectAnswers);
             }
 
             _context.Set<Question>().Update(entity);
@@ -117,7 +114,7 @@ namespace QuizWhois.Domain.Services.Implementations
             _logger.LogInformation($"Question id = {entity.Id} was deleted");
         }
 
-        public async Task CreateQuestions(IEnumerable<QuestionModel> questionsToAdd)
+        public async Task CreateQuestions(IEnumerable<QuestionModelRequest> questionsToAdd)
         {
             foreach (var question in questionsToAdd)
             {

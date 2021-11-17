@@ -9,13 +9,11 @@ namespace QuizWhois.Domain.Services.Interfaces
 {
     public interface IPackService
     {
-        public Task AddToPack(AddToSetModel addToSetModel);
+        public Task<PackModelResponse> CreatePack(PackModelRequest packModel);
 
-        public Task<PackModel> CreatePack(PackModel packModel);
+        public PackModelResponse GetPack(long packId);
 
-        public PackModel GetPack(long packId);
-
-        public Task UpdatePack(PackModel packModel, long packId);
+        public Task UpdatePack(PackModelRequest packModel, long packId);
 
         public Task DeletePack(long packId);
     }

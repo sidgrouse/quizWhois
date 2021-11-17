@@ -29,7 +29,8 @@ namespace QuizWhois.Domain.Services.Implementations
             }
             else
             {
-                return new QuestionModel(randomRecord.Id, randomRecord.QuestionText, randomRecord.CorrectAnswer);
+                return new QuestionModel(randomRecord.Id, randomRecord.QuestionText, randomRecord.CorrectAnswers
+                    .Select(x => x.AnswerText).ToList());
             }
         }
 
@@ -47,7 +48,7 @@ namespace QuizWhois.Domain.Services.Implementations
             }
             else
             {
-                return userAnswerModel.UserAnswerText.Equals(selectQuestion.CorrectAnswer);
+                return selectQuestion.CorrectAnswers.Select(x => x.AnswerText).Contains(userAnswerModel.UserAnswerText);
             }
         }
     }

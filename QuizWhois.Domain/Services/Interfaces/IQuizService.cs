@@ -12,5 +12,7 @@ namespace QuizWhois.Domain.Services.Interfaces
         public Task AddToQuiz(AddToSetModel addToSet);
 
         public Task<QuizModel> CreateQuiz(List<long> question, string quizName = "");
+
+        public QuizModel GetQuiz(long quizId);
     }
 }

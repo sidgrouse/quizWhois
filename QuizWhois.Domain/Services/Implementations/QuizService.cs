@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -33,7 +34,8 @@ namespace QuizWhois.Domain.Services.Implementations
             await _dbContext.AddAsync(quizToSave);
             await _dbContext.SaveChangesAsync();
             _logger.LogInformation($"Quiz id = {quizToSave.Id} was saved with question ids {questionIdsToLog}");
-            var questions = quizToSave.Questions.Select(q => new QuestionModel(q.Id, q.QuestionText, q.CorrectAnswer));
+            var questions = quizToSave.Questions.Select(q => 
+                new QuestionModel(q.Id, q.QuestionText, q.CorrectAnswers.Select(x => x.AnswerText).ToList()));
             return new QuizModel(quizToSave.Id, questions, quizToSave.Name);
         }
 
@@ -55,6 +57,37 @@ namespace QuizWhois.Domain.Services.Implementations
 
             messageToLog += $"have been added to quiz with id {quiz.Id}";
             _logger.LogInformation(messageToLog);
+        }
+
+        public QuizModel GetQuiz(long quizId)
+        {
+            if (quizId <= 0)
+            {
+                throw new Exception("Id was invalid number");
+            }
+
+            var entity = _dbContext.Quizzes.Where(x => x.Id == quizId).Select(x => new
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Questions = x.Questions.Select(y => new Question
+                {
+                    Id = y.Id,
+                    QuizId = y.QuizId,
+                    QuestionText = y.QuestionText,
+                    CorrectAnswers = y.CorrectAnswers.ToList()
+                }).ToList()
+            }).FirstOrDefault();
+
+            var questionModels = new List<QuestionModel>();
+            entity.Questions.ForEach(x =>
+            {
+                var correctAnswers = new List<string>();
+                var entityAnswers = _dbContext.Set<CorrectAnswer>().Where(y => y.QuestionId == x.Id);
+                entityAnswers.ToList().ForEach(y => correctAnswers.Add(y.AnswerText));
+                questionModels.Add(new QuestionModel(x.Id, x.QuestionText, correctAnswers));
+            });
+            return new QuizModel(entity.Id, questionModels, entity.Name);
         }
 
         private async Task<Quiz> QuizById(long quizId)

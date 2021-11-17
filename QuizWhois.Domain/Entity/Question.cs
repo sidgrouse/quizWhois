@@ -8,15 +8,10 @@ namespace QuizWhois.Domain.Entity
 
         public string QuestionText { get; set; }
 
-        public string CorrectAnswer { get; set; }
+        public List<CorrectAnswer> CorrectAnswers { get; set; }
 
+        public long QuizId { get; set; }
         public List<Hint> Hints { get; set; }
 
-        public Question(string questionText, string correctAnswer)
-        {
-            QuestionText = questionText;
-            CorrectAnswer = correctAnswer;
-            Hints = new List<Hint>();
-        }
     }
 }

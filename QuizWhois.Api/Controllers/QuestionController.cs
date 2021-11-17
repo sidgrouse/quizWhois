@@ -38,6 +38,24 @@ namespace QuizWhois.Api.Controllers
             return _questionService.GetQuestion(questionId);
         }
 
+        [HttpPut("{questionId}")]
+        [ProducesResponseType(typeof(QuestionRatingModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> Update(QuestionModel questionModel, long questionId)
+        {
+            await _questionService.UpdateQuestion(questionModel, questionId);
+            return Ok();
+        }
+
+        [HttpDelete("{questionId}")]
+        [ProducesResponseType(typeof(QuestionRatingModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> Delete(long questionId)
+        {
+            await _questionService.DeleteQuestion(questionId);
+            return Ok();
+        }
+
         [HttpPost("{questionId}/rating")]
         [ProducesResponseType(typeof(QuestionRatingModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

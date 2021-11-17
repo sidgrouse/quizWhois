@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace QuizWhois.Common.Models
 {
-    public class QuizModel
+    public class PackModel
     {
-        public QuizModel(long id, IEnumerable<QuestionModel> questions, string name)
+        public PackModel(long id, string name, string description, bool? isDraft)
         {
             Id = id;
-            Questions = questions;
             Name = name;
+            Description = description;
+            IsDraft = isDraft;
         }
 
         public long Id { get; set; }
@@ -20,5 +21,9 @@ namespace QuizWhois.Common.Models
         public IEnumerable<QuestionModel> Questions { get; set; }
 
         public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        public bool? IsDraft { get; set; }
     }
 }

@@ -11,5 +11,9 @@ namespace QuizWhois.Domain.Services.Interfaces
         public QuestionModel GetQuestion(long questionId);
 
         public Task CreateQuestions(IEnumerable<QuestionModel> questionsToAdd);
+
+        public Task UpdateQuestion(QuestionModel questionModel, long questionId);
+
+        public Task DeleteQuestion(long questionId);
     }
 }

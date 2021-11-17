@@ -29,8 +29,11 @@ namespace QuizWhois.Domain.Services.Implementations
             }
             else
             {
-                return new QuestionModel(randomRecord.Id, randomRecord.QuestionText, randomRecord.CorrectAnswers
-                    .Select(x => x.AnswerText).ToList());
+                return new QuestionModel(
+                    randomRecord.Id,
+                    randomRecord.QuestionText,
+                    randomRecord.CorrectAnswers.Select(x => x.AnswerText).ToList(),
+                    randomRecord.PackId);
             }
         }
 

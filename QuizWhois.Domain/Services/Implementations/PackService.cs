@@ -35,26 +35,6 @@ namespace QuizWhois.Domain.Services.Implementations
             return new PackModelResponse(packToSave.Id, packToSave.Name, packToSave.Description, packToSave.IsDraft);
         }
 
-        /*public async Task AddToPack(AddToSetModel addToSetModel)
-        {
-            var pack = await PackById(addToSetModel.PackId);
-            foreach (var questionId in addToSetModel.QuestionIds)
-            {
-                await AddQuestionToPack(pack, questionId);
-            }
-
-            this._dbContext.SaveChanges();
-
-            string messageToLog = "Questions with id ";
-            foreach (var questionId in addToSetModel.QuestionIds)
-            {
-                messageToLog += $"{questionId} ";
-            }
-
-            messageToLog += $"have been added to pack with id {pack.Id}";
-            _logger.LogInformation(messageToLog);
-        }*/
-
         public PackModelResponse GetPack(long packId)
         {
             if (packId <= 0)

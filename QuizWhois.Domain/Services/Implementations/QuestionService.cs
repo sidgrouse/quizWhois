@@ -114,14 +114,16 @@ namespace QuizWhois.Domain.Services.Implementations
             _logger.LogInformation($"Question id = {entity.Id} was deleted");
         }
 
-        public async Task CreateQuestions(IEnumerable<QuestionModelRequest> questionsToAdd)
+        public async Task<List<QuestionModelResponse>> CreateQuestions(IEnumerable<QuestionModelRequest> questionsToAdd)
         {
+            var questions = new List<QuestionModelResponse>();
             foreach (var question in questionsToAdd)
             {
-               await AddQuestion(question);
+               questions.Add(await AddQuestion(question));
             }
 
             await _context.SaveChangesAsync();
+            return questions;
         }
     }
 }

@@ -22,11 +22,11 @@ namespace QuizWhois.Api.Controllers
 
         // [Authorize]
         [HttpPost]
-        [ProducesResponseType(typeof(PackModelResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CreatedResult), StatusCodes.Status201Created)]
         public async Task<ActionResult<PackModelResponse>> CreatePack(PackModelRequest packModel)
         {
             var formedPack = await _packService.CreatePack(packModel);
-            return formedPack;
+            return new CreatedResult($"/pack/{formedPack.Id}", formedPack);
         }
 
         // [Authorize]

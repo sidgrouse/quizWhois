@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,12 +23,12 @@ namespace QuizWhois.Api.Controllers
         }
         
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CreatedResult), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> CreateQuestions(List<QuestionModelRequest> questions)
         {
-            await _questionService.CreateQuestions(questions);
-            return Ok();
+            var formedQuestions = await _questionService.CreateQuestions(questions);
+            return new CreatedResult($"/question/{formedQuestions.FirstOrDefault().Id}", formedQuestions);
         }
 
         [HttpGet("{questionId}")]

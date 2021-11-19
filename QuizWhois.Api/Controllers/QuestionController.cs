@@ -29,7 +29,14 @@ namespace QuizWhois.Api.Controllers
         public async Task<ActionResult> CreateQuestions(List<QuestionModelRequest> questions)
         {
             var formedQuestions = await _questionService.CreateQuestions(questions);
-            return new CreatedResult($"/question/{formedQuestions.FirstOrDefault().Id}", formedQuestions);
+            if (formedQuestions.Count == 1)
+            {
+                new CreatedResult($"{Request.Scheme}://{Request.Host}{Request.Path}/{formedQuestions.FirstOrDefault().Id}", formedQuestions);
+            }
+            else
+            {
+                return new CreatedResult($"{Request.Scheme}://{Request.Host}{Request.Path}", formedQuestions);
+            }
         }
 
         [HttpGet("{questionId}")]

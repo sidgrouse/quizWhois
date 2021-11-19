@@ -26,7 +26,7 @@ namespace QuizWhois.Api.Controllers
         public async Task<ActionResult<PackModelResponse>> CreatePack(PackModelRequest packModel)
         {
             var formedPack = await _packService.CreatePack(packModel);
-            return new CreatedResult($"/pack/{formedPack.Id}", formedPack);
+            return new CreatedResult($"{Request.Scheme}://{Request.Host}{Request.Path}/{formedPack.Id}", formedPack);
         }
 
         // [Authorize]

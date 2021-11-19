@@ -31,7 +31,7 @@ namespace QuizWhois.Api.Controllers
             var formedQuestions = await _questionService.CreateQuestions(questions);
             if (formedQuestions.Count == 1)
             {
-                new CreatedResult($"{Request.Scheme}://{Request.Host}{Request.Path}/{formedQuestions.FirstOrDefault().Id}", formedQuestions);
+                return new CreatedResult($"{Request.Scheme}://{Request.Host}{Request.Path}/{formedQuestions.FirstOrDefault().Id}", formedQuestions);
             }
             else
             {

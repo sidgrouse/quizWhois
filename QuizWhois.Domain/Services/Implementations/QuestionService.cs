@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using QuizWhois.Common;
 using QuizWhois.Common.Models;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Entity;
@@ -41,10 +42,7 @@ namespace QuizWhois.Domain.Services.Implementations
 
         public QuestionModelResponse GetQuestion(long questionId)
         {
-            if (questionId <= 0)
-            {
-                throw new Exception("Id was invalid number");
-            }
+            DataValidation.ValidateId(questionId);
 
             var entity = _context.Questions.Where(x => x.Id == questionId).Select(x => new
                 {
@@ -61,10 +59,7 @@ namespace QuizWhois.Domain.Services.Implementations
 
         public async Task UpdateQuestion(QuestionModelRequest questionModel, long questionId)
         {
-            if (questionId <= 0)
-            {
-                throw new Exception("Id was invalid number");
-            }
+            DataValidation.ValidateId(questionId);
 
             var entity = _context.Questions.Where(x => x.Id == questionId).Select(x => new Question
             {
@@ -98,10 +93,7 @@ namespace QuizWhois.Domain.Services.Implementations
 
         public async Task DeleteQuestion(long questionId)
         {
-            if (questionId <= 0)
-            {
-                throw new Exception("Id was invalid number");
-            }
+            DataValidation.ValidateId(questionId);
 
             var entity = _context.Set<Question>().FirstOrDefault(x => x.Id == questionId);
             if (entity == null)

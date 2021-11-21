@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using QuizWhois.Common;
 using QuizWhois.Common.Models;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Entity;
@@ -23,7 +25,7 @@ namespace QuizWhois.Domain.Services.Implementations
 
         public async Task<PackModelResponse> CreatePack(PackModelRequest packModel)
         {
-            if (packModel == null || packModel.IsDraft == null)
+            if (packModel == null || !packModel.IsDraft.HasValue)
             {
                 throw new Exception("Pack Model or IsDraft field was null");
             }
@@ -37,45 +39,20 @@ namespace QuizWhois.Domain.Services.Implementations
 
         public PackModelResponse GetPack(long packId)
         {
-            if (packId <= 0)
-            {
-                throw new Exception("Id was invalid number");
-            }
+            DataValidation.ValidateId(packId);
 
-            var entity = _dbContext.Packs.Where(x => x.Id == packId).Select(x => new
-            {
-                Id = x.Id,
-                Name = x.Name,
-                IsDraft = x.IsDraft,
-                Descriptin = x.Description,
-                Questions = x.Questions.Select(y => new Question
-                {
-                    Id = y.Id,
-                    PackId = y.PackId,
-                    QuestionText = y.QuestionText,
-                    CorrectAnswers = y.CorrectAnswers.ToList()
-                }).ToList()
-            }).FirstOrDefault();
+            var packFromDb = _dbContext.Packs.Where(x => x.Id == packId).Include(y => y.Questions.Where(z => z.PackId == packId))
+                .ThenInclude(a => a.CorrectAnswers.Where(b => b.Question.PackId == packId)).FirstOrDefault();
+            var result = new PackModelResponse(packFromDb.Id, packFromDb.Name, packFromDb.Description, packFromDb.IsDraft);
+            result.Questions = packFromDb.Questions
+                .Select(x => new QuestionModelResponse(x.Id, x.QuestionText, x.CorrectAnswers.Select(y => y.AnswerText).ToList(), x.PackId));
 
-            var questionModels = new List<QuestionModelResponse>();
-            entity.Questions.ForEach(x =>
-            {
-                var correctAnswers = new List<string>();
-                var entityAnswers = _dbContext.Set<CorrectAnswer>().Where(y => y.QuestionId == x.Id);
-                entityAnswers.ToList().ForEach(y => correctAnswers.Add(y.AnswerText));
-                questionModels.Add(new QuestionModelResponse(x.Id, x.QuestionText, correctAnswers, x.PackId));
-            });
-            var result = new PackModelResponse(entity.Id, entity.Name, entity.Descriptin, entity.IsDraft);
-            result.Questions = questionModels;
             return result;
         }
 
         public async Task UpdatePack(PackModelRequest packModel, long packId)
         {
-            if (packId <= 0)
-            {
-                throw new Exception("Id was invalid number");
-            }
+            DataValidation.ValidateId(packId);
 
             var entity = _dbContext.Set<Pack>().FirstOrDefault(x => x.Id == packId);
             if (entity == null)
@@ -83,12 +60,12 @@ namespace QuizWhois.Domain.Services.Implementations
                 throw new Exception("Pack is not found");
             }
 
-            if (packModel.Name != string.Empty)
+            if (!string.IsNullOrWhiteSpace(packModel.Name))
             {
                 entity.Name = packModel.Name;
             }
 
-            if (packModel.Description != string.Empty)
+            if (!string.IsNullOrWhiteSpace(packModel.Description))
             {
                 entity.Description = packModel.Description;
             }
@@ -98,17 +75,13 @@ namespace QuizWhois.Domain.Services.Implementations
                 entity.IsDraft = packModel.IsDraft.Value;
             }
 
-            _dbContext.Set<Pack>().Update(entity);
             await _dbContext.SaveChangesAsync();
             _logger.LogInformation($"Pack id = {entity.Id} was updated");
         }
 
         public async Task DeletePack(long packId)
         {
-            if (packId <= 0)
-            {
-                throw new Exception("Id was invalid number");
-            }
+            DataValidation.ValidateId(packId);
 
             var entity = _dbContext.Set<Pack>().FirstOrDefault(x => x.Id == packId);
             if (entity == null)

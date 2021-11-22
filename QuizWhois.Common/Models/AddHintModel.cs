@@ -8,8 +8,8 @@ namespace QuizWhois.Common.Models
 {
     public class AddHintModel
     {
-        public long QuestionId { get; set; }
+        public long QuestionId { get; }
 
-        public string Text { get; set; }
+        public string Text { get; }
     }
 }

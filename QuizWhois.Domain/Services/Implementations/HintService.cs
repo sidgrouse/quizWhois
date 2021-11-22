@@ -16,14 +16,14 @@ namespace QuizWhois.Domain.Services.Implementations
             Context = context;
         }
 
-        public async Task<HintModel> AddHint(long questionId, string text)
+        public async Task<HintModel> AddHint(AddHintModel model)
         {
-            if (questionId <= 0 || text is null || text == string.Empty)
+            if (model.QuestionId <= 0 || model.Text is null || model.Text == string.Empty)
             {
                 throw new ArgumentException("hintModel in HintService.AddHint was null");
             }
 
-            var entity = new Hint(questionId, text);
+            var entity = new Hint(model.QuestionId, model.Text);
             Context.Set<Hint>().Add(entity);
             await Context.SaveChangesAsync();
             return new HintModel(entity.Id, entity.QuestionId, entity.Text);

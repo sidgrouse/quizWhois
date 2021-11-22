@@ -20,9 +20,9 @@ namespace QuizWhois.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public Task<HintModel> Post(long questionId, string text)
+        public Task<HintModel> Post(AddHintModel model)
         {
-            var addedHint = _hintService.AddHint(questionId, text);
+            var addedHint = _hintService.AddHint(model);
             return addedHint;
         }
     }

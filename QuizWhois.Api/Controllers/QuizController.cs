@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QuizWhois.Common.Models;
@@ -9,8 +10,9 @@ using QuizWhois.Domain.Services.Interfaces;
 
 namespace QuizWhois.Api.Controllers
 {
+    [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("quiz")]
     public class QuizController
     {
         private readonly IQuizService _quizService;
@@ -19,8 +21,7 @@ namespace QuizWhois.Api.Controllers
         {
             _quizService = quizService;           
         }
-
-        // [Authorize]
+        
         [HttpPost("questions")]
         [ProducesResponseType(typeof(QuizModel), StatusCodes.Status200OK)]
         public async Task<ActionResult> AddToSet([FromBody] AddToSetModel model)
@@ -29,7 +30,6 @@ namespace QuizWhois.Api.Controllers
             return new OkResult();
         }
 
-        // [Authorize]
         [HttpPost]
         [ProducesResponseType(typeof(QuizModel), StatusCodes.Status200OK)]
         public async Task<ActionResult<QuizModel>> CreateSet(List<long> questions, string quizName = "")

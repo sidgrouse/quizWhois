@@ -75,5 +75,23 @@ namespace QuizWhois.Api.Controllers
             var averageRating = _questionRatingService.GetAverageRating(questionId);
             return averageRating;
         }
+
+        [HttpPost("{questionId}/image")]
+        [ProducesResponseType(typeof(QuestionRatingModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<QuestionRatingModel> Post(long questionId, IFormFile image)
+        {
+            var addedImage = _questionRatingService.AddOrReplaceImage(questionId, image);
+            return Ok(addedImage);
+        }
+
+        [HttpDelete("{questionId}/image")]
+        [ProducesResponseType(typeof(QuestionRatingModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<QuestionRatingModel> DeleteImage(long questionId)
+        {
+            var deleteImage = _questionRatingService.DeleteImage(questionId);
+            return Ok(deleteImage);
+        }
     }
 }

@@ -16,6 +16,8 @@ namespace QuizWhois.Domain.Database
 
         public DbSet<Quiz> Quizzes { get; set; }
 
+        public DbSet<QuestionImage> QuestionImages { get; set; }
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {
@@ -41,7 +43,8 @@ namespace QuizWhois.Domain.Database
         public void QuestionConfigure(EntityTypeBuilder<Question> builder)
         {
             builder.ToTable("Question").HasKey(x => x.Id);
-            builder.Property(x => x.QuestionText).IsRequired().HasMaxLength(255);
+            builder.HasOne(x => x.QuestionImage).WithOne(q => q.Question).HasForeignKey<QuestionImage>(i => i.QuestionId);
+            builder.Property(x => x.QuestionText).IsRequired().HasMaxLength(255);            
         }
 
         public void QuestionRatingConfigure(EntityTypeBuilder<QuestionRating> builder)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using QuizWhois.Common.Models;
 using QuizWhois.Domain.Database;
@@ -96,6 +97,16 @@ namespace QuizWhois.Domain.Services.Implementations
             _context.SaveChanges();
             _logger.LogInformation($"QuestionRating id = {entity.Id}, questionId = {entity.QuestionId}, userId = {entity.UserId} was deleted");
             return true;
+        }
+
+        public bool AddOrReplaceImage(long questionId, IFormFile image)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteImage(long questionId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -26,12 +26,14 @@ namespace QuizWhois.Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(CreatedResult), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> CreateQuestions(List<QuestionModelRequest> questions)
+        public async Task<ActionResult> CreateQuestions(QuestionsCreatingModelRequest questions)
         {
             var formedQuestions = await _questionService.CreateQuestions(questions);
-            if (formedQuestions.Count == 1)
+            if (formedQuestions.Questions.Count == 1)
             {
-                return new CreatedResult($"{Request.Scheme}://{Request.Host}{Request.Path}/{formedQuestions.FirstOrDefault().Id}", formedQuestions);
+                return new CreatedResult(
+                    $"{Request.Scheme}://{Request.Host}{Request.Path}/{formedQuestions.Questions.FirstOrDefault().Id}",
+                    formedQuestions);
             }
             else
             {

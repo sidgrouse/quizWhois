@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using QuizWhois.Common;
 using QuizWhois.Common.Models;
@@ -61,32 +62,18 @@ namespace QuizWhois.Domain.Services.Implementations
         {
             DataValidation.ValidateId(questionId);
 
-            var entity = _context.Questions.Where(x => x.Id == questionId).Select(x => new Question
-            {
-                Id = x.Id,
-                QuestionText = x.QuestionText,
-                CorrectAnswers = x.CorrectAnswers,
-                PackId = x.PackId
-            }).FirstOrDefault();
+            var entity = _context.Questions.Where(x => x.Id == questionId).Include(x => x.CorrectAnswers).FirstOrDefault();
             if (entity == null)
             {
                 throw new Exception("Question is not found");
             }
 
-            if (questionModel.QuestionText != string.Empty)
-            {
-                entity.QuestionText = questionModel.QuestionText;
-            }
-
+            entity.QuestionText = questionModel.QuestionText ?? entity.QuestionText;
             if (questionModel.CorrectAnswers != null && questionModel.CorrectAnswers.Count != 0)
             {
-                _context.Set<CorrectAnswer>().RemoveRange(entity.CorrectAnswers);
-                entity.CorrectAnswers.Clear();
-                questionModel.CorrectAnswers.ForEach(x => entity.CorrectAnswers.Add(new CorrectAnswer(x)));
-                _context.Set<CorrectAnswer>().AddRange(entity.CorrectAnswers);
+                entity.CorrectAnswers = questionModel.CorrectAnswers.Select(x => new CorrectAnswer(x)).ToList();
             }
 
-            _context.Set<Question>().Update(entity);
             await _context.SaveChangesAsync();
             _logger.LogInformation($"Question id = {entity.Id} was updated");
         }
@@ -106,12 +93,12 @@ namespace QuizWhois.Domain.Services.Implementations
             _logger.LogInformation($"Question id = {entity.Id} was deleted");
         }
 
-        public async Task<List<QuestionModelResponse>> CreateQuestions(IEnumerable<QuestionModelRequest> questionsToAdd)
+        public async Task<QuestionsCreatingModelResponse> CreateQuestions(QuestionsCreatingModelRequest questionsToAdd)
         {
-            var questions = new List<QuestionModelResponse>();
-            foreach (var question in questionsToAdd)
+            var questions = new QuestionsCreatingModelResponse();
+            foreach (var question in questionsToAdd.Questions)
             {
-               questions.Add(await AddQuestion(question));
+               questions.Questions.Add(await AddQuestion(question));
             }
 
             await _context.SaveChangesAsync();

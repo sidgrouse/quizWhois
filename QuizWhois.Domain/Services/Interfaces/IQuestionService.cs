@@ -10,7 +10,7 @@ namespace QuizWhois.Domain.Services.Interfaces
 
         public QuestionModelResponse GetQuestion(long questionId);
 
-        public Task<List<QuestionModelResponse>> CreateQuestions(IEnumerable<QuestionModelRequest> questionsToAdd);
+        public Task<QuestionsCreatingModelResponse> CreateQuestions(QuestionsCreatingModelRequest questionsToAdd);
 
         public Task UpdateQuestion(QuestionModelRequest questionModel, long questionId);
 

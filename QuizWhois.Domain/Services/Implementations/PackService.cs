@@ -27,7 +27,7 @@ namespace QuizWhois.Domain.Services.Implementations
         {
             if (packModel == null || !packModel.IsDraft.HasValue)
             {
-                throw new Exception("Pack Model or IsDraft field was null");
+                throw new ArgumentException("Pack Model or IsDraft field was null");
             }
 
             var packToSave = new Pack(packModel.Name, packModel.Description, packModel.IsDraft.Value);
@@ -57,7 +57,7 @@ namespace QuizWhois.Domain.Services.Implementations
             var entity = _dbContext.Set<Pack>().FirstOrDefault(x => x.Id == packId);
             if (entity == null)
             {
-                throw new Exception("Pack is not found");
+                throw new ArgumentException("Pack is not found");
             }
 
             if (!string.IsNullOrWhiteSpace(packModel.Name))

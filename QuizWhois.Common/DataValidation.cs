@@ -12,7 +12,7 @@ namespace QuizWhois.Common
         {
             if (id <= 0)
             {
-                throw new Exception("Id was invalid number");
+                throw new ArgumentException("Id was invalid number");
             }
         }
     }

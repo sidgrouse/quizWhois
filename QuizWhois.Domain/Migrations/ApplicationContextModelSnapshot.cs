@@ -36,26 +36,6 @@ namespace QuizWhois.Domain.Migrations
                     b.ToTable("CorrectAnswer");
                 });
 
-            modelBuilder.Entity("QuizWhois.Domain.Entity.Pack", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("IsDraft")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Packs");
-                });
-
             modelBuilder.Entity("QuizWhois.Domain.Entity.Hint", b =>
                 {
                     b.Property<long>("Id")
@@ -75,6 +55,26 @@ namespace QuizWhois.Domain.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("Hint");
+                });
+
+            modelBuilder.Entity("QuizWhois.Domain.Entity.Pack", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsDraft")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Packs");
                 });
 
             modelBuilder.Entity("QuizWhois.Domain.Entity.Question", b =>

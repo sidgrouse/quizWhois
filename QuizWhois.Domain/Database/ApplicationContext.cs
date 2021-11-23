@@ -14,7 +14,7 @@ namespace QuizWhois.Domain.Database
 
         public DbSet<User> Users { get; set; }
 
-        public DbSet<Quiz> Quizzes { get; set; }
+        public DbSet<Pack> Packs { get; set; }
 
         public DbSet<Hint> Hints { get; set; }
 
@@ -36,8 +36,8 @@ namespace QuizWhois.Domain.Database
                     new User { Id = 1, Login = "Qwerty" },
                     new User { Id = 2, Login = "Asdfg" },
                 });
-            modelBuilder.Entity<Quiz>().HasKey(q => q.Id);
-            modelBuilder.Entity<Quiz>().HasMany(x => x.Questions).WithOne();
+            modelBuilder.Entity<Pack>().HasKey(q => q.Id);
+            modelBuilder.Entity<Pack>().HasMany(x => x.Questions).WithOne();
             modelBuilder.Entity<Hint>(HintConfigure);
         }
 

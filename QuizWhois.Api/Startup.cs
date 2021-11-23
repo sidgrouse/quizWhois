@@ -63,7 +63,7 @@ namespace QuizWhois.Api
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IUserAnswerService, UserAnswerService>();
             services.AddScoped<IQuestionRatingService, QuestionRatingService>();
-            services.AddScoped<IQuizService, QuizService>();
+            services.AddScoped<IPackService, PackService>();
             services.AddScoped<CustomExceptionFilter>();
             services.AddScoped<IHintService, HintService>();
 

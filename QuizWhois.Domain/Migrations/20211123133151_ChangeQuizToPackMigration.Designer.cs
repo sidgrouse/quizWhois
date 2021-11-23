@@ -8,7 +8,7 @@ using QuizWhois.Domain.Database;
 namespace QuizWhois.Domain.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20211116101527_ChangeQuizToPackMigration")]
+    [Migration("20211123133151_ChangeQuizToPackMigration")]
     partial class ChangeQuizToPackMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,27 @@ namespace QuizWhois.Domain.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("CorrectAnswer");
+                });
+
+            modelBuilder.Entity("QuizWhois.Domain.Entity.Hint", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("QuestionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Hint");
                 });
 
             modelBuilder.Entity("QuizWhois.Domain.Entity.Pack", b =>
@@ -142,6 +163,17 @@ namespace QuizWhois.Domain.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("QuizWhois.Domain.Entity.Hint", b =>
+                {
+                    b.HasOne("QuizWhois.Domain.Entity.Question", "Question")
+                        .WithMany("Hints")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
             modelBuilder.Entity("QuizWhois.Domain.Entity.Question", b =>
                 {
                     b.HasOne("QuizWhois.Domain.Entity.Pack", null)
@@ -178,6 +210,8 @@ namespace QuizWhois.Domain.Migrations
             modelBuilder.Entity("QuizWhois.Domain.Entity.Question", b =>
                 {
                     b.Navigation("CorrectAnswers");
+
+                    b.Navigation("Hints");
                 });
 #pragma warning restore 612, 618
         }

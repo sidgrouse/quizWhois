@@ -12,10 +12,20 @@ namespace QuizWhois.Domain.Entity
 
         public byte[] ImageData { get; set; }
 
+        public string Name { get; set; }
+
         public string Caption { get; set; }
 
-        public int QuestionId { get; set; }
+        public long QuestionId { get; set; }
 
         public Question Question { get; set; }
+
+        public QuestionImage(string name, byte[] data, string caption, long questionId)
+        {
+            Name = name;
+            Caption = caption;
+            ImageData = data;
+            QuestionId = questionId;
+        }
     }
 }

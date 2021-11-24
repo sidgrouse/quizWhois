@@ -109,10 +109,19 @@ namespace QuizWhois.Api.Controllers
         [HttpPost("{questionId}/image")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult Post(long questionId, IFormFile image)
+        public ActionResult Post(IFormFile image, QuestionImageRequest imageInfo)
         {
-            var addedImage = _questionImageService.AddOrReplaceImage(questionId, image);
+            var addedImage = _questionImageService.AddOrReplaceImage(image, imageInfo);
             return Ok();
+        }
+
+        [HttpGet("{questionId}/image")]
+        [ProducesResponseType(typeof(QuestionImageResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<QuestionImageResponse>> GetImage(long questionId)
+        {
+            var image = await _questionImageService.GetQuestionImage(questionId);
+            return image;
         }
 
         [HttpDelete("{questionId}/image")]

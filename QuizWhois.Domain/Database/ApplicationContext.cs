@@ -46,7 +46,7 @@ namespace QuizWhois.Domain.Database
         public void QuestionConfigure(EntityTypeBuilder<Question> builder)
         {
             builder.ToTable("Question").HasKey(x => x.Id);
-            builder.HasOne(x => x.QuestionImage).WithOne(q => q.Question).HasForeignKey<QuestionImage>(i => i.QuestionId);
+            builder.HasOne(x => x.Image).WithOne(q => q.Question).HasForeignKey<QuestionImage>(i => i.QuestionId);
             builder.Property(x => x.QuestionText).IsRequired().HasMaxLength(255);            
         }
 

@@ -13,8 +13,9 @@ namespace QuizWhois.Domain.Entity
         public long PackId { get; set; }
 
         public List<Hint> Hints { get; set; }
+
         public long QuizId { get; set; }
 
-        public QuestionImage QuestionImage { get; set; }
+        public QuestionImage Image { get; set; }
     }
 }

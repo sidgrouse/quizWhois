@@ -8,7 +8,7 @@ namespace QuizWhois.Domain.Services.Interfaces
     {
         public Task<QuestionImageResponse> GetQuestionImage(long questionId);
 
-        public Task<bool> AddOrReplaceImage(IFormFile image, QuestionImageRequest imageInfo);
+        public Task<bool> AddOrReplaceImage(IFormFile image, string caption, long questionId);
 
         public Task DeleteImage(long questionId);
     }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,8 +10,10 @@ namespace QuizWhois.Domain.Entity
 {
     public class QuestionImage
     {
-        public long QuestionImageId { get; set; }
+        public long Id { get; set; }
 
+        [MaxLength(16777215)]
+        [Column(TypeName = "Binary")]
         public byte[] ImageData { get; set; }
 
         public string Name { get; set; }
@@ -18,14 +22,6 @@ namespace QuizWhois.Domain.Entity
 
         public long QuestionId { get; set; }
 
-        public Question Question { get; set; }
-
-        public QuestionImage(string name, byte[] data, string caption, long questionId)
-        {
-            Name = name;
-            Caption = caption;
-            ImageData = data;
-            QuestionId = questionId;
-        }
+        public Question Question { get; set; }       
     }
 }

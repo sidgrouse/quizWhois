@@ -24,13 +24,13 @@ namespace QuizWhois.Domain.Services.Implementations
             _logger = logger;
         }
 
-        public async Task<bool> AddOrReplaceImage(IFormFile image, QuestionImageRequest imageInfo)
+        public async Task<bool> AddOrReplaceImage(IFormFile image, string caption, long questionId)
         {
-            DataValidation.ValidateId(imageInfo.QuestionId);
+            DataValidation.ValidateId(questionId);
 
             if (image.ContentType == "image/jpeg" && image.Length > 0)
             {
-                var question = GetQuestionById(imageInfo.QuestionId);
+                var question = GetQuestionById(questionId);
 
                 if (question != null)
                 {
@@ -38,7 +38,13 @@ namespace QuizWhois.Domain.Services.Implementations
                     await image.CopyToAsync(ms);
                     var imageBytes = ms.ToArray();
 
-                    question.Image = new (image.Name, imageBytes, imageInfo.Caption, imageInfo.QuestionId);
+                    question.Image = new () 
+                    {
+                       QuestionId = questionId,
+                       Caption = caption,
+                       Name = image.FileName,
+                       ImageData = imageBytes                       
+                    };
                     await _context.SaveChangesAsync();
                     return true;
                 }

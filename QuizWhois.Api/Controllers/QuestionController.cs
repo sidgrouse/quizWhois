@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -25,20 +26,47 @@ namespace QuizWhois.Api.Controllers
         }
         
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CreatedResult), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> CreateQuestions(List<QuestionModel> questions)
+        public async Task<ActionResult> CreateQuestions(QuestionsCreatingModelRequest questions)
         {
-            await _questionService.CreateQuestions(questions);
-            return Ok();
+            var formedQuestions = await _questionService.CreateQuestions(questions);
+            if (formedQuestions.Questions.Count == 1)
+            {
+                return new CreatedResult(
+                    $"{Request.Scheme}://{Request.Host}{Request.Path}/{formedQuestions.Questions.FirstOrDefault().Id}",
+                    formedQuestions);
+            }
+            else
+            {
+                return new CreatedResult($"{Request.Scheme}://{Request.Host}{Request.Path}", formedQuestions);
+            }
         }
 
         [HttpGet("{questionId}")]
-        [ProducesResponseType(typeof(QuestionModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(QuestionModelResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<QuestionModel> GetQuestion(long questionId)
+        public ActionResult<QuestionModelResponse> GetQuestion(long questionId)
         {
             return _questionService.GetQuestion(questionId);
+        }
+
+        [HttpPut("{questionId}")]
+        [ProducesResponseType(typeof(QuestionRatingModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> Update(QuestionModelRequest questionModel, long questionId)
+        {
+            await _questionService.UpdateQuestion(questionModel, questionId);
+            return Ok();
+        }
+
+        [HttpDelete("{questionId}")]
+        [ProducesResponseType(typeof(QuestionRatingModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> Delete(long questionId)
+        {
+            await _questionService.DeleteQuestion(questionId);
+            return Ok();
         }
 
         [HttpPost("{questionId}/rating")]

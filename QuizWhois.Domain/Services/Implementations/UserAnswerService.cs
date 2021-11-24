@@ -19,7 +19,7 @@ namespace QuizWhois.Domain.Services.Implementations
             _context = context;
         }
 
-        public QuestionModel GetRandomQuestion()
+        public QuestionModelResponse GetRandomQuestion()
         {
             var random = new Random().Next(0, _context.Set<Question>().Count());
             var randomRecord = _context.Set<Question>().OrderBy(x => x.Id).Skip(random).FirstOrDefault();
@@ -29,8 +29,11 @@ namespace QuizWhois.Domain.Services.Implementations
             }
             else
             {
-                return new QuestionModel(randomRecord.Id, randomRecord.QuestionText, randomRecord.CorrectAnswers
-                    .Select(x => x.AnswerText).ToList());
+                return new QuestionModelResponse(
+                    randomRecord.Id,
+                    randomRecord.QuestionText,
+                    randomRecord.CorrectAnswers.Select(x => x.AnswerText).ToList(),
+                    randomRecord.PackId);
             }
         }
 

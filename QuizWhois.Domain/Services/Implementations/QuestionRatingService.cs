@@ -98,15 +98,5 @@ namespace QuizWhois.Domain.Services.Implementations
             _logger.LogInformation($"QuestionRating id = {entity.Id}, questionId = {entity.QuestionId}, userId = {entity.UserId} was deleted");
             return true;
         }
-
-        public bool AddOrReplaceImage(long questionId, IFormFile image)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool DeleteImage(long questionId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

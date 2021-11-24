@@ -15,11 +15,13 @@ namespace QuizWhois.Api.Controllers
     {
         private readonly IQuestionService _questionService;
         private readonly IQuestionRatingService _questionRatingService;
+        private readonly IQuestionImageService _questionImageService;
 
-        public QuestionController(IQuestionService questionService, IQuestionRatingService questionRatingService)
+        public QuestionController(IQuestionService questionService, IQuestionRatingService questionRatingService, IQuestionImageService questionImageService)
         {
             _questionService = questionService;
             _questionRatingService = questionRatingService;
+            _questionImageService = questionImageService;
         }
         
         [HttpPost]
@@ -77,21 +79,21 @@ namespace QuizWhois.Api.Controllers
         }
 
         [HttpPost("{questionId}/image")]
-        [ProducesResponseType(typeof(QuestionRatingModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<QuestionRatingModel> Post(long questionId, IFormFile image)
+        public ActionResult Post(long questionId, IFormFile image)
         {
-            var addedImage = _questionRatingService.AddOrReplaceImage(questionId, image);
-            return Ok(addedImage);
+            var addedImage = _questionImageService.AddOrReplaceImage(questionId, image);
+            return Ok();
         }
 
         [HttpDelete("{questionId}/image")]
-        [ProducesResponseType(typeof(QuestionRatingModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<QuestionRatingModel> DeleteImage(long questionId)
+        public ActionResult DeleteImage(long questionId)
         {
-            var deleteImage = _questionRatingService.DeleteImage(questionId);
-            return Ok(deleteImage);
+            var deleteImage = _questionImageService.DeleteImage(questionId);
+            return Ok();
         }
     }
 }

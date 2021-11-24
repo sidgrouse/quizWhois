@@ -12,9 +12,5 @@ namespace QuizWhois.Domain.Services.Interfaces
         public QuestionRatingModel UpdateRating(long questionModelId, long userId, uint rating);
 
         public bool DeleteRating(long questionModelId, long userId);
-
-        public bool AddOrReplaceImage(long questionId, IFormFile image);
-
-        public bool DeleteImage(long questionId);
     }
 }

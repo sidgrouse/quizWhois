@@ -1,3 +1,4 @@
+using System;
 using Google.Apis.Auth.AspNetCore3;
 using Google.Apis.Auth.OAuth2;
 using JavaScriptEngineSwitcher.ChakraCore;
@@ -5,17 +6,14 @@ using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using QuizWhois.Api.Hubs;
 using QuizWhois.Common;
 using QuizWhois.Domain.Database;
-using QuizWhois.Domain.Middleware;
 using QuizWhois.Domain.Services.Implementations;
 using QuizWhois.Domain.Services.Interfaces;
 using React.AspNet;
@@ -43,7 +41,7 @@ namespace QuizWhois.Api
             services.AddReact();
             services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
 
-            var clientSecrets = GoogleClientSecrets.FromFile(Configuration[ClientSecretFilenameKey]).Secrets;           
+            var clientSecrets = GoogleClientSecrets.FromFile(Configuration[ClientSecretFilenameKey]).Secrets;
 
             services.AddControllers(options =>
             {
@@ -67,20 +65,22 @@ namespace QuizWhois.Api
             services.AddScoped<CustomExceptionFilter>();
             services.AddScoped<IHintService, HintService>();
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services
               .AddAuthentication(o =>
               {
-                   // This forces challenge results to be handled by Google OpenID Handler, so there's no
-                   // need to add an AccountController that emits challenges for Login.
-                   o.DefaultChallengeScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
+                  // This forces challenge results to be handled by Google OpenID Handler, so there's no
+                  // need to add an AccountController that emits challenges for Login.
+                  o.DefaultChallengeScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
 
-                   // This forces forbid results to be handled by Google OpenID Handler, which checks if
-                   // extra scopes are required and does automatic incremental auth.
-                   o.DefaultForbidScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
+                  // This forces forbid results to be handled by Google OpenID Handler, which checks if
+                  // extra scopes are required and does automatic incremental auth.
+                  o.DefaultForbidScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
 
-                   // Default scheme that will handle everything else.
-                   // Once a user is authenticated, the OAuth2 token info is stored in cookies.
-                   o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                  // Default scheme that will handle everything else.
+                  // Once a user is authenticated, the OAuth2 token info is stored in cookies.
+                  o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
               })
               .AddCookie()
               .AddGoogleOpenIdConnect(options =>
@@ -111,7 +111,7 @@ namespace QuizWhois.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 

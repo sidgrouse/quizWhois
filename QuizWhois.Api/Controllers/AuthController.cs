@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Google.Apis.Auth;
@@ -15,18 +11,14 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Newtonsoft.Json;
-using QuizWhois.Common.Models;
-using QuizWhois.Domain.Entity;
 
 namespace QuizWhois.Api.Controllers
 {
     [ApiController]
     [Route("auth")]
     public class AuthController : Controller
-    {        
+    {
         [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> LogOut()
@@ -38,7 +30,7 @@ namespace QuizWhois.Api.Controllers
         [Authorize]
         [HttpGet("login")]
         public IActionResult LogIn()
-        {           
+        {
             return Ok("Success LogIn");
         }
 
@@ -90,7 +82,7 @@ namespace QuizWhois.Api.Controllers
             result.AppendLine($"Access token expires at: '{accessTokenExpiresAt}'");
             result.AppendLine($"Cookie Issued UTC: '{cookieIssuedUtc}'");
             result.AppendLine($"Cookie Expires UTC: '{cookieExpiresUtc}'");
-            return result.ToString();            
+            return result.ToString();
         }
 
         public class ForceTokenRefreshModel
@@ -181,7 +173,7 @@ namespace QuizWhois.Api.Controllers
             result.AppendLine($"Expected access token: '{expectedAccessToken}'");
             result.AppendLine($"Credential access token: '{credAccessToken}'");
             result.AppendLine($"Pass: {pass}");
-            return result.ToString();            
+            return result.ToString();
         }
     }
 }

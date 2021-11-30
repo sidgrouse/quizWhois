@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Google.Apis.Auth.AspNetCore3" Version="1.55.0" />
     <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="3.12.6" />
     <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.linux-x64" Version="3.12.6" />

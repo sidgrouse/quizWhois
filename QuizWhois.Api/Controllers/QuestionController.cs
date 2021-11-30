@@ -128,10 +128,10 @@ namespace QuizWhois.Api.Controllers
         [HttpDelete("{questionId}/image")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult DeleteImage(long questionId)
+        public async Task<ActionResult<bool>> DeleteImage(long questionId)
         {
-            var deleteImage = _questionImageService.DeleteImage(questionId);
-            return Ok();
+            var deleted = await _questionImageService.DeleteImage(questionId);
+            return deleted;
         }
     }
 }

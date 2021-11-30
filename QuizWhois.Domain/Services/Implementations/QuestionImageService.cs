@@ -64,12 +64,13 @@ namespace QuizWhois.Domain.Services.Implementations
             }
         }
 
-        public async Task DeleteImage(long questionId)
+        public async Task<bool> DeleteImage(long questionId)
         {
             DataValidation.ValidateId(questionId);
             var question = await GetQuestionById(questionId);
             question.Image = null;
             await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<QuestionImageResponse> GetQuestionImage(long questionId)

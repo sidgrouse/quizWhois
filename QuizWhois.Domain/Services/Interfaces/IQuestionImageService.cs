@@ -10,6 +10,6 @@ namespace QuizWhois.Domain.Services.Interfaces
 
         public Task<bool> AddOrReplaceImage(IFormFile image, string caption, long questionId);
 
-        public Task DeleteImage(long questionId);
+        public Task<bool> DeleteImage(long questionId);
     }
 }

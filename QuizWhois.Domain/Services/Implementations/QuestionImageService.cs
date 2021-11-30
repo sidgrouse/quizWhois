@@ -30,13 +30,15 @@ namespace QuizWhois.Domain.Services.Implementations
 
             if (image.ContentType == "image/jpeg" && image.Length > 0)
             {
-                var question = GetQuestionById(questionId);
+                var question = await GetQuestionById(questionId);
 
                 if (question != null)
                 {
-                    using var ms = new MemoryStream();
+                    var imageBytes = new byte[image.Length];
+                    var ms = new MemoryStream();                    
                     await image.CopyToAsync(ms);
-                    var imageBytes = ms.ToArray();
+                    imageBytes = ms.ToArray();
+                    ms.Dispose();
 
                     question.Image = new () 
                     {
@@ -45,8 +47,11 @@ namespace QuizWhois.Domain.Services.Implementations
                        Name = image.FileName,
                        ImageData = imageBytes                       
                     };
-                    await _context.SaveChangesAsync();
-                    return true;
+                    
+                    var result = await _context.Set<QuestionImage>().AddAsync(question.Image);
+                    await _context.SaveChangesAsync();                    
+
+                    return result != null;
                 }
                 else
                 {
@@ -62,7 +67,7 @@ namespace QuizWhois.Domain.Services.Implementations
         public async Task DeleteImage(long questionId)
         {
             DataValidation.ValidateId(questionId);
-            var question = GetQuestionById(questionId);
+            var question = await GetQuestionById(questionId);
             question.Image = null;
             await _context.SaveChangesAsync();
         }
@@ -73,6 +78,11 @@ namespace QuizWhois.Domain.Services.Implementations
 
             var image = await _context.Set<QuestionImage>().FirstOrDefaultAsync(x => x.QuestionId == questionId);
 
+            if (image == null)
+            {
+                throw new ArgumentException("Question does not have an image");
+            }
+
             return new QuestionImageResponse()
             {
                 Caption = image.Caption,
@@ -82,9 +92,9 @@ namespace QuizWhois.Domain.Services.Implementations
             };
         }
 
-        private Entity.Question GetQuestionById(long questionId)
+        private async Task<Entity.Question> GetQuestionById(long questionId)
         {
-            return _context.Questions.Where(x => x.Id == questionId).Include(x => x.Image).FirstOrDefault();
+            return await _context.Questions.Where(x => x.Id == questionId).Include(x => x.Image).FirstOrDefaultAsync();
         }
     }
 }

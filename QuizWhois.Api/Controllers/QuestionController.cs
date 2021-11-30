@@ -109,9 +109,9 @@ namespace QuizWhois.Api.Controllers
         [HttpPost("{questionId}/image")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult Post(IFormFile image, string caption, long questionId)
+        public async Task<ActionResult> Post(IFormFile image, string caption, long questionId)
         {
-            var addedImage = _questionImageService.AddOrReplaceImage(image, caption, questionId);
+            var addedImage = await _questionImageService.AddOrReplaceImage(image, caption, questionId);
             return Ok();
         }
 

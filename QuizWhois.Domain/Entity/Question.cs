@@ -14,8 +14,6 @@ namespace QuizWhois.Domain.Entity
 
         public List<Hint> Hints { get; set; }
 
-        public long QuizId { get; set; }
-
         public QuestionImage Image { get; set; }
     }
 }

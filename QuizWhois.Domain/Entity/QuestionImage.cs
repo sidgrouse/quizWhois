@@ -12,8 +12,7 @@ namespace QuizWhois.Domain.Entity
     {
         public long Id { get; set; }
 
-        [MaxLength(16777215)]
-        [Column(TypeName = "Binary")]
+        [Column(TypeName = "MediumBlob")]        
         public byte[] ImageData { get; set; }
 
         public string Name { get; set; }

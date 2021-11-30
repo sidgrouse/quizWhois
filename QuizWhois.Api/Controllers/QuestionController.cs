@@ -107,6 +107,7 @@ namespace QuizWhois.Api.Controllers
         }
 
         [HttpPost("{questionId}/image")]
+        [RequestSizeLimit(16777215)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Post(IFormFile image, string caption, long questionId)

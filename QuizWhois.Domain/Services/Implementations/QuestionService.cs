@@ -38,7 +38,7 @@ namespace QuizWhois.Domain.Services.Implementations
             _logger.LogInformation($"Question id = {entity.Id} was added");
             var correctAnswersToModel = new List<string>();
             result.Entity.CorrectAnswers.ForEach(x => correctAnswersToModel.Add(x.AnswerText));
-            return new QuestionModelResponse(result.Entity.Id, result.Entity.QuestionText, correctAnswersToModel, result.Entity.PackId);
+            return new QuestionModelResponse(result.Entity.Id, result.Entity.QuestionText, correctAnswersToModel, result.Entity.PackId, result.Entity.Image != null);
         }
 
         public QuestionModelResponse GetQuestion(long questionId)
@@ -50,12 +50,13 @@ namespace QuizWhois.Domain.Services.Implementations
                     id = x.Id,
                     questionText = x.QuestionText,
                     correctAnswers = x.CorrectAnswers,
-                    packId = x.PackId
+                    packId = x.PackId,
+                    hasImage = x.Image != null,
                 }).FirstOrDefault();
 
             var correctAnswers = new List<string>();
             entity.correctAnswers.ToList().ForEach(x => correctAnswers.Add(x.AnswerText));
-            return new QuestionModelResponse(entity.id, entity.questionText, correctAnswers, entity.packId);
+            return new QuestionModelResponse(entity.id, entity.questionText, correctAnswers, entity.packId, entity.hasImage);
         }
 
         public async Task UpdateQuestion(QuestionModelRequest questionModel, long questionId)

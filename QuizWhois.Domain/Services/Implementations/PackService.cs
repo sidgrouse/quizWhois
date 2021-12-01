@@ -41,11 +41,13 @@ namespace QuizWhois.Domain.Services.Implementations
         {
             DataValidation.ValidateId(packId);
 
-            var packFromDb = _dbContext.Packs.Where(x => x.Id == packId).Include(y => y.Questions.Where(z => z.PackId == packId))
-                .ThenInclude(a => a.CorrectAnswers.Where(b => b.Question.PackId == packId)).FirstOrDefault();
+            var packFromDb = _dbContext.Packs.Where(x => x.Id == packId)
+                .Include(y => y.Questions.Where(z => z.PackId == packId)).ThenInclude(a => a.CorrectAnswers.Where(b => b.Question.PackId == packId))
+                .Include(x => x.Questions.Where(z => z.PackId == packId)).ThenInclude(x => x.Image)
+                .FirstOrDefault();
             var result = new PackModelResponse(packFromDb.Id, packFromDb.Name, packFromDb.Description, packFromDb.IsDraft);
             result.Questions = packFromDb.Questions
-                .Select(x => new QuestionModelResponse(x.Id, x.QuestionText, x.CorrectAnswers.Select(y => y.AnswerText).ToList(), x.PackId));
+                .Select(x => new QuestionModelResponse(x.Id, x.QuestionText, x.CorrectAnswers.Select(y => y.AnswerText).ToList(), x.PackId, x.Image != null));
 
             return result;
         }

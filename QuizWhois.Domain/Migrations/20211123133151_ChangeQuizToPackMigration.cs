@@ -8,110 +8,42 @@ namespace QuizWhois.Domain.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Question_Quizzes_QuizId",
-                table: "Question");
+            migrationBuilder.RenameTable(
+                name: "Quizzes",
+                newName: "Packs");
 
-            migrationBuilder.DropTable(
-                name: "Quizzes");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Question_QuizId",
-                table: "Question");
-
-            migrationBuilder.DropColumn(
+            migrationBuilder.RenameColumn(
                 name: "QuizId",
-                table: "Question");
-
-            migrationBuilder.AddColumn<long>(
-                name: "PackId",
                 table: "Question",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
+                newName: "PackId");
 
-            migrationBuilder.CreateTable(
-                name: "Packs",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsDraft = table.Column<bool>(type: "tinyint(1)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Packs", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+            migrationBuilder.AddColumn<string>(
+                name: "Description",
+                table: "Packs",
+                type: "longtext",
+                nullable: true).Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Question_PackId",
-                table: "Question",
-                column: "PackId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Question_Packs_PackId",
-                table: "Question",
-                column: "PackId",
-                principalTable: "Packs",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddColumn<bool>(
+                name: "IsDraft",
+                table: "Packs",
+                type: "tinyint(1)",
+                nullable: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Question_Packs_PackId",
-                table: "Question");
+            migrationBuilder.RenameTable(
+                name: "Packs",
+                newName: "Quizzes");
 
-            migrationBuilder.DropTable(
-                name: "Packs");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Question_PackId",
-                table: "Question");
+            migrationBuilder.RenameColumn(
+                name: "PackId",
+                table: "Question",
+                newName: "QuizId");
 
             migrationBuilder.DropColumn(
-                name: "PackId",
-                table: "Question");
-
-            migrationBuilder.AddColumn<long>(
-                name: "QuizId",
-                table: "Question",
-                type: "bigint",
-                nullable: true);
-
-            migrationBuilder.CreateTable(
-                name: "Quizzes",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Quizzes", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Question_QuizId",
-                table: "Question",
-                column: "QuizId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Question_Quizzes_QuizId",
-                table: "Question",
-                column: "QuizId",
-                principalTable: "Quizzes",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                name: "Description",
+                table: "Quizzes");
         }
     }
 }

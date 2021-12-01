@@ -8,10 +8,6 @@ namespace QuizWhois.Domain.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "CorrectAnswer",
-                table: "Question");
-
             migrationBuilder.CreateTable(
                 name: "CorrectAnswer",
                 columns: table => new
@@ -38,13 +34,18 @@ namespace QuizWhois.Domain.Migrations
                 name: "IX_CorrectAnswer_QuestionId",
                 table: "CorrectAnswer",
                 column: "QuestionId");
+
+            migrationBuilder.Sql(@"
+                INSERT INTO CorrectAnswer(QuestionId, AnswerText) SELECT Id, CorrectAnswer FROM Question
+            ");
+
+            migrationBuilder.DropColumn(
+                name: "CorrectAnswer",
+                table: "Question");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "CorrectAnswer");
-
             migrationBuilder.AddColumn<string>(
                 name: "CorrectAnswer",
                 table: "Question",
@@ -53,6 +54,13 @@ namespace QuizWhois.Domain.Migrations
                 nullable: false,
                 defaultValue: "")
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.Sql(@"
+                INSERT INTO Question(AnswerText) SELECT AnswerText FROM CorrectAnswer
+            ");
+
+            migrationBuilder.DropTable(
+                name: "CorrectAnswer");
         }
     }
 }

@@ -13,6 +13,8 @@ namespace QuizWhois.Domain.Services.Interfaces
 
         public PackModelResponse GetPack(long packId);
 
+        public DraftPacksModelResponse GetDraftPacks();
+
         public Task UpdatePack(PackModelRequest packModel, long packId);
 
         public Task DeletePack(long packId);

@@ -10,6 +10,8 @@ namespace QuizWhois.Domain.Entity
 
         public List<CorrectAnswer> CorrectAnswers { get; set; }
 
+        public Pack Pack { get; set; }
+        
         public long PackId { get; set; }
 
         public List<Hint> Hints { get; set; }

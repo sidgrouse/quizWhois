@@ -37,13 +37,15 @@ namespace QuizWhois.Domain.Database
                     new User { Id = 2, Login = "Asdfg" },
                 });
             modelBuilder.Entity<Pack>().HasKey(q => q.Id);
-            modelBuilder.Entity<Pack>().HasMany(x => x.Questions).WithOne();
+            
+            // modelBuilder.Entity<Pack>().HasMany(x => x.Questions).WithOne();
             modelBuilder.Entity<Hint>(HintConfigure);
         }
 
         public void QuestionConfigure(EntityTypeBuilder<Question> builder)
         {
             builder.ToTable("Question").HasKey(x => x.Id);
+            builder.Property(x => x.PackId).IsRequired();
             builder.Property(x => x.QuestionText).IsRequired().HasMaxLength(255);
         }
 

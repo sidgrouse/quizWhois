@@ -50,6 +50,15 @@ namespace QuizWhois.Domain.Services.Implementations
             return result;
         }
 
+        public DraftPacksModelResponse GetDraftPacks()
+        {
+            var packsFromDb = _dbContext.Packs.Where(x => x.IsDraft == true).Include(y => y.Questions.Where(z => z.Pack.IsDraft == true))
+                .ThenInclude(a => a.CorrectAnswers.Where(b => b.Question.Pack.IsDraft == true)).ToList();
+            var result = new DraftPacksModelResponse(new List<PackModelResponse>());
+            packsFromDb.ForEach(x => result.DraftPacks.Add(new PackModelResponse(x.Id, x.Name, x.Description, x.IsDraft)));
+            return result;
+        }
+
         public async Task UpdatePack(PackModelRequest packModel, long packId)
         {
             DataValidation.ValidateId(packId);

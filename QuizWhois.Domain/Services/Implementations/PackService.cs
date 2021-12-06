@@ -55,7 +55,19 @@ namespace QuizWhois.Domain.Services.Implementations
             var packsFromDb = _dbContext.Packs.Where(x => x.IsDraft == true).Include(y => y.Questions.Where(z => z.Pack.IsDraft == true))
                 .ThenInclude(a => a.CorrectAnswers.Where(b => b.Question.Pack.IsDraft == true)).ToList();
             var result = new DraftPacksModelResponse(new List<PackModelResponse>());
-            packsFromDb.ForEach(x => result.DraftPacks.Add(new PackModelResponse(x.Id, x.Name, x.Description, x.IsDraft)));
+            packsFromDb.ForEach(x => 
+                {
+                    var packResult = new PackModelResponse(x.Id, x.Name, x.Description, x.IsDraft);
+                    var questionResult = new List<QuestionModelResponse>();
+                    x.Questions.ForEach(y =>
+                    {
+                        var correctAnswerResult = new List<string>();
+                        y.CorrectAnswers.ForEach(z => correctAnswerResult.Add(z.AnswerText));
+                        questionResult.Add(new QuestionModelResponse(y.Id, y.QuestionText, correctAnswerResult, y.PackId));
+                    });
+                    packResult.Questions = new List<QuestionModelResponse>(questionResult);
+                    result.DraftPacks.Add(packResult);
+                });
             return result;
         }
 

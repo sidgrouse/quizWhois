@@ -37,8 +37,6 @@ namespace QuizWhois.Domain.Database
                     new User { Id = 2, Login = "Asdfg" },
                 });
             modelBuilder.Entity<Pack>().HasKey(q => q.Id);
-            
-            // modelBuilder.Entity<Pack>().HasMany(x => x.Questions).WithOne();
             modelBuilder.Entity<Hint>(HintConfigure);
         }
 

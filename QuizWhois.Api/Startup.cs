@@ -6,6 +6,8 @@ using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -82,9 +84,14 @@ namespace QuizWhois.Api
                   // Once a user is authenticated, the OAuth2 token info is stored in cookies.
                   o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
               })
-              .AddCookie()
-              .AddGoogleOpenIdConnect(options =>
+              .AddCookie(options =>
               {
+                  options.Cookie.HttpOnly = true;
+                  options.Cookie.SameSite = SameSiteMode.None;
+                  options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+              })
+              .AddGoogleOpenIdConnect(options =>
+              {                  
                   options.ClientId = clientSecrets.ClientId;
                   options.ClientSecret = clientSecrets.ClientSecret;
               });

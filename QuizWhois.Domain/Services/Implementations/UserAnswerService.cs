@@ -5,6 +5,7 @@ using QuizWhois.Common.Models;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Entity;
 using QuizWhois.Domain.Services.Interfaces;
+using QuizWhois.Domain.Services.Mapper;
 
 namespace QuizWhois.Domain.Services.Implementations
 {
@@ -29,12 +30,7 @@ namespace QuizWhois.Domain.Services.Implementations
             }
             else
             {
-                return _mapper.Map<QuestionModelResponse>(randomRecord);
-                /*return new QuestionModelResponse(
-                    randomRecord.Id,
-                    randomRecord.QuestionText,
-                    randomRecord.CorrectAnswers.Select(x => x.AnswerText).ToList(),
-                    randomRecord.PackId);*/
+                return randomRecord.ToQuestionModelResponse();
             }
         }
 

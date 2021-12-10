@@ -9,6 +9,7 @@ using QuizWhois.Common.Models;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Entity;
 using QuizWhois.Domain.Services.Interfaces;
+using QuizWhois.Domain.Services.Mapper;
 
 namespace QuizWhois.Domain.Services.Implementations
 {
@@ -36,7 +37,7 @@ namespace QuizWhois.Domain.Services.Implementations
             var result = await _dbContext.AddAsync(packToSave);
             await _dbContext.SaveChangesAsync();
             _logger.LogInformation($"Pack id = {packToSave.Id} was saved");
-            return _mapper.Map<PackModelResponse>(result.Entity);
+            return result.Entity.ToPackModelResponse();
         }
 
         public PackModelResponse GetPack(long packId)
@@ -46,7 +47,7 @@ namespace QuizWhois.Domain.Services.Implementations
             var entity = _dbContext.Packs.Where(x => x.Id == packId)
                 .Include(x => x.Questions)
                 .ThenInclude(x => x.CorrectAnswers).FirstOrDefault();
-            return _mapper.Map<PackModelResponse>(entity);
+            return entity.ToPackModelResponse();
         }
 
         public async Task UpdatePack(PackModelRequest packModel, long packId)

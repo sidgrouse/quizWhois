@@ -10,6 +10,7 @@ using QuizWhois.Common.Models;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Entity;
 using QuizWhois.Domain.Services.Interfaces;
+using QuizWhois.Domain.Services.Mapper;
 
 namespace QuizWhois.Domain.Services.Implementations
 {
@@ -39,11 +40,7 @@ namespace QuizWhois.Domain.Services.Implementations
             var result = await _context.Questions.AddAsync(entity);
             await _context.SaveChangesAsync();
             _logger.LogInformation($"Question id = {entity.Id} was added");
-            var response = _mapper.Map<QuestionModelResponse>(result.Entity);
-            return response;
-            /*var correctAnswersToModel = new List<string>();
-            result.Entity.CorrectAnswers.ForEach(x => correctAnswersToModel.Add(x.AnswerText));
-            return new QuestionModelResponse(result.Entity.Id, result.Entity.QuestionText, correctAnswersToModel, result.Entity.PackId);*/
+            return entity.ToQuestionModelResponse();
         }
 
         public QuestionModelResponse GetQuestion(long questionId)
@@ -51,10 +48,7 @@ namespace QuizWhois.Domain.Services.Implementations
             DataValidation.ValidateId(questionId);
             var entity = _context.Questions.Where(x => x.Id == questionId)
                 .Include(x => x.CorrectAnswers).FirstOrDefault();
-            return _mapper.Map<QuestionModelResponse>(entity);
-            /*var correctAnswers = new List<string>();
-            entity.correctAnswers.ToList().ForEach(x => correctAnswers.Add(x.AnswerText));
-            return new QuestionModelResponse(entity.id, entity.questionText, correctAnswers, entity.packId);*/
+            return entity.ToQuestionModelResponse();
         }
 
         public async Task UpdateQuestion(QuestionModelRequest questionModel, long questionId)

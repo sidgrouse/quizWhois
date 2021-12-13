@@ -15,7 +15,7 @@ namespace QuizWhois.Domain.Services.Mapper
 
             var answers = new List<string>();
             question.CorrectAnswers.ForEach(x => answers.Add(x.AnswerText));
-            return new QuestionModelResponse(question.Id, question.QuestionText, answers, question.PackId);
+            return new QuestionModelResponse(question.Id, question.QuestionText, answers, question.PackId, question.Image != null);
         }
 
         public static PackModelResponse ToPackModelResponse(this Pack pack)

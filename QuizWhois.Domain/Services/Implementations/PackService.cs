@@ -46,7 +46,8 @@ namespace QuizWhois.Domain.Services.Implementations
 
             var entity = _dbContext.Packs.Where(x => x.Id == packId)
                 .Include(x => x.Questions)
-                .ThenInclude(x => x.CorrectAnswers).FirstOrDefault();
+                .ThenInclude(x => x.CorrectAnswers)
+                .Include(x => x.Questions).ThenInclude(x => x.Image).FirstOrDefault();
             return entity.ToPackModelResponse();
         }
 

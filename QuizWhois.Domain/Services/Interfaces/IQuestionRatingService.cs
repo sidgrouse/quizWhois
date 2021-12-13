@@ -1,4 +1,5 @@
-﻿using QuizWhois.Common.Models;
+﻿using Microsoft.AspNetCore.Http;
+using QuizWhois.Common.Models;
 
 namespace QuizWhois.Domain.Services.Interfaces
 {

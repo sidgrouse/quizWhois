@@ -46,8 +46,10 @@ namespace QuizWhois.Domain.Services.Implementations
         public QuestionModelResponse GetQuestion(long questionId)
         {
             DataValidation.ValidateId(questionId);
+
             var entity = _context.Questions.Where(x => x.Id == questionId)
-                .Include(x => x.CorrectAnswers).FirstOrDefault();
+                .Include(x => x.CorrectAnswers)
+                .Include(x => x.Image).FirstOrDefault();
             return entity.ToQuestionModelResponse();
         }
 

@@ -16,11 +16,13 @@ namespace QuizWhois.Api.Controllers
     {
         private readonly IQuestionService _questionService;
         private readonly IQuestionRatingService _questionRatingService;
+        private readonly IQuestionImageService _questionImageService;
 
-        public QuestionController(IQuestionService questionService, IQuestionRatingService questionRatingService)
+        public QuestionController(IQuestionService questionService, IQuestionRatingService questionRatingService, IQuestionImageService questionImageService)
         {
             _questionService = questionService;
             _questionRatingService = questionRatingService;
+            _questionImageService = questionImageService;
         }
         
         [HttpPost]
@@ -102,6 +104,34 @@ namespace QuizWhois.Api.Controllers
         {
             var averageRating = _questionRatingService.GetAverageRating(questionId);
             return averageRating;
+        }
+
+        [HttpPost("{questionId}/image")]
+        [RequestSizeLimit(16777215)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> Post(IFormFile image, string caption, long questionId)
+        {
+            var addedImage = await _questionImageService.AddOrReplaceImage(image, caption, questionId);
+            return Ok();
+        }
+
+        [HttpGet("{questionId}/image")]
+        [ProducesResponseType(typeof(QuestionImageResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<QuestionImageResponse>> GetImage(long questionId)
+        {
+            var image = await _questionImageService.GetQuestionImage(questionId);
+            return image;
+        }
+
+        [HttpDelete("{questionId}/image")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<bool>> DeleteImage(long questionId)
+        {
+            var deleted = await _questionImageService.DeleteImage(questionId);
+            return deleted;
         }
     }
 }

@@ -33,7 +33,8 @@ namespace QuizWhois.Domain.Services.Implementations
                     randomRecord.Id,
                     randomRecord.QuestionText,
                     randomRecord.CorrectAnswers.Select(x => x.AnswerText).ToList(),
-                    randomRecord.PackId);
+                    randomRecord.PackId,
+                    randomRecord.Image != null);
             }
         }
 

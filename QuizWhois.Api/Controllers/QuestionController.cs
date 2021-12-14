@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QuizWhois.Api.Models;
@@ -24,7 +22,7 @@ namespace QuizWhois.Api.Controllers
             _questionRatingService = questionRatingService;
             _questionImageService = questionImageService;
         }
-        
+
         [HttpPost]
         [ProducesResponseType(typeof(CreatedResult), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

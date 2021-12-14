@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QuizWhois.Common.Models;
@@ -17,7 +14,7 @@ namespace QuizWhois.Api.Controllers
 
         public PackController(IPackService packService)
         {
-            _packService = packService;           
+            _packService = packService;
         }
 
         // [Authorize]

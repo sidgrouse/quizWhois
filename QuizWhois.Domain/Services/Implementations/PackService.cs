@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using QuizWhois.Common;
@@ -9,6 +9,7 @@ using QuizWhois.Common.Models;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Entity;
 using QuizWhois.Domain.Services.Interfaces;
+using QuizWhois.Domain.Services.Mapper;
 
 namespace QuizWhois.Domain.Services.Implementations
 {
@@ -16,11 +17,13 @@ namespace QuizWhois.Domain.Services.Implementations
     {
         private readonly ApplicationContext _dbContext;
         private readonly ILogger<PackService> _logger;
+        private readonly IMapper _mapper;
 
-        public PackService(ApplicationContext context, ILogger<PackService> logger)
+        public PackService(ApplicationContext context, ILogger<PackService> logger, IMapper mapper)
         {
             _dbContext = context;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public async Task<PackModelResponse> CreatePack(PackModelRequest packModel)
@@ -30,26 +33,22 @@ namespace QuizWhois.Domain.Services.Implementations
                 throw new ArgumentException("Pack Model or IsDraft field was null");
             }
 
-            var packToSave = new Pack(packModel.Name, packModel.Description, packModel.IsDraft.Value);
-            await _dbContext.AddAsync(packToSave);
+            var packToSave = _mapper.Map<Pack>(packModel);
+            var result = await _dbContext.AddAsync(packToSave);
             await _dbContext.SaveChangesAsync();
             _logger.LogInformation($"Pack id = {packToSave.Id} was saved");
-            return new PackModelResponse(packToSave.Id, packToSave.Name, packToSave.Description, packToSave.IsDraft);
+            return result.Entity.ToPackModelResponse();
         }
 
         public PackModelResponse GetPack(long packId)
         {
             DataValidation.ValidateId(packId);
 
-            var packFromDb = _dbContext.Packs.Where(x => x.Id == packId)
-                .Include(y => y.Questions.Where(z => z.PackId == packId)).ThenInclude(a => a.CorrectAnswers.Where(b => b.Question.PackId == packId))
-                .Include(x => x.Questions.Where(z => z.PackId == packId)).ThenInclude(x => x.Image)
-                .FirstOrDefault();
-            var result = new PackModelResponse(packFromDb.Id, packFromDb.Name, packFromDb.Description, packFromDb.IsDraft);
-            result.Questions = packFromDb.Questions
-                .Select(x => new QuestionModelResponse(x.Id, x.QuestionText, x.CorrectAnswers.Select(y => y.AnswerText).ToList(), x.PackId, x.Image != null));
-
-            return result;
+            var entity = _dbContext.Packs.Where(x => x.Id == packId)
+                .Include(x => x.Questions)
+                .ThenInclude(x => x.CorrectAnswers)
+                .Include(x => x.Questions).ThenInclude(x => x.Image).FirstOrDefault();
+            return entity.ToPackModelResponse();
         }
 
         public async Task UpdatePack(PackModelRequest packModel, long packId)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -51,24 +52,26 @@ namespace QuizWhois.Domain.Services.Implementations
             return entity.ToPackModelResponse();
         }
 
-        public DraftPacksModelResponse GetDraftPacks()
+        public SomePacksModelResponse GetAll(bool? isDraft = null)
         {
-            var packsFromDb = _dbContext.Packs.Where(x => x.IsDraft == true).Include(y => y.Questions.Where(z => z.Pack.IsDraft == true))
-                .ThenInclude(a => a.CorrectAnswers.Where(b => b.Question.Pack.IsDraft == true)).ToList();
-            var result = new DraftPacksModelResponse(new List<PackModelResponse>());
-            packsFromDb.ForEach(x => 
-                {
-                    var packResult = new PackModelResponse(x.Id, x.Name, x.Description, x.IsDraft);
-                    var questionResult = new List<QuestionModelResponse>();
-                    x.Questions.ForEach(y =>
-                    {
-                        var correctAnswerResult = new List<string>();
-                        y.CorrectAnswers.ForEach(z => correctAnswerResult.Add(z.AnswerText));
-                        questionResult.Add(new QuestionModelResponse(y.Id, y.QuestionText, correctAnswerResult, y.PackId));
-                    });
-                    packResult.Questions = new List<QuestionModelResponse>(questionResult);
-                    result.DraftPacks.Add(packResult);
-                });
+            List<Pack> entities;
+            if (isDraft != null)
+            {
+                entities = _dbContext.Packs.Where(x => x.IsDraft == isDraft)
+                .Include(x => x.Questions)
+                .ThenInclude(x => x.CorrectAnswers)
+                .Include(x => x.Questions).ThenInclude(x => x.Image).ToList();
+            }
+            else
+            {
+                entities = _dbContext.Packs
+                .Include(x => x.Questions)
+                .ThenInclude(x => x.CorrectAnswers)
+                .Include(x => x.Questions).ThenInclude(x => x.Image).ToList();
+            }
+
+            var result = new SomePacksModelResponse(new List<PackModelResponse>());
+            entities.ForEach(x => result.Packs.Add(x.ToPackModelResponse()));
             return result;
         }
 

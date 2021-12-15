@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using QuizWhois.Common.Models;
@@ -33,5 +31,5 @@ namespace QuizWhois.Api.Hubs
             var isAnswerRight = _userAnswerService.CheckAnswer(new UserAnswerModel(id, userAnswer));
             await Clients.Caller.SendAsync("ReceiveAnswer", id, isAnswerRight);
         }
-    }    
+    }
 }

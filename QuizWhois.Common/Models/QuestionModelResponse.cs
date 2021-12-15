@@ -12,12 +12,15 @@ namespace QuizWhois.Common.Models
 
         public long PackId { get; set; }
 
-        public QuestionModelResponse(long id, string questionText, List<string> correctAnswers, long packId)
+        public bool HasImage { get; set; }
+
+        public QuestionModelResponse(long id, string questionText, List<string> correctAnswers, long packId, bool hasImage)
         {
             Id = id;
             QuestionText = questionText;
             CorrectAnswers = correctAnswers;
             PackId = packId;
+            HasImage = hasImage;
         }
     }
 }

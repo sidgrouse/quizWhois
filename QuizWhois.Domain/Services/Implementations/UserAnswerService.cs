@@ -1,22 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper;
 using QuizWhois.Common.Models;
 using QuizWhois.Domain.Database;
 using QuizWhois.Domain.Entity;
 using QuizWhois.Domain.Services.Interfaces;
+using QuizWhois.Domain.Services.Mapper;
 
 namespace QuizWhois.Domain.Services.Implementations
 {
     public class UserAnswerService : IUserAnswerService
     {
         private readonly ApplicationContext _context;
+        private readonly IMapper _mapper;
 
-        public UserAnswerService(ApplicationContext context)
+        public UserAnswerService(ApplicationContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public QuestionModelResponse GetRandomQuestion()
@@ -29,11 +30,7 @@ namespace QuizWhois.Domain.Services.Implementations
             }
             else
             {
-                return new QuestionModelResponse(
-                    randomRecord.Id,
-                    randomRecord.QuestionText,
-                    randomRecord.CorrectAnswers.Select(x => x.AnswerText).ToList(),
-                    randomRecord.PackId);
+                return randomRecord.ToQuestionModelResponse();
             }
         }
 

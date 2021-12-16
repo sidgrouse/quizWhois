@@ -37,20 +37,20 @@ namespace QuizWhois.Api.Controllers
 
         // [Authorize]
         [HttpGet("/draft")]
-        [ProducesResponseType(typeof(SomePacksModelResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PacksModelResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<SomePacksModelResponse> GetDraftPacks()
+        public ActionResult<PacksModelResponse> GetDraftPacks()
         {
-            return _packService.GetAll(true);
+            return _packService.GetPacks(true);
         }
 
         // [Authorize]
-        [HttpGet("/getall")]
-        [ProducesResponseType(typeof(SomePacksModelResponse), StatusCodes.Status200OK)]
+        [HttpGet]
+        [ProducesResponseType(typeof(PacksModelResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<SomePacksModelResponse> GetAll()
+        public ActionResult<PacksModelResponse> GetAll()
         {
-            return _packService.GetAll();
+            return _packService.GetPacks();
         }
 
         // [Authorize]

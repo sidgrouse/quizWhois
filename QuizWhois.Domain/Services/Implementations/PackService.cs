@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
 using QuizWhois.Common;
 using QuizWhois.Common.Models;
@@ -52,26 +53,24 @@ namespace QuizWhois.Domain.Services.Implementations
             return entity.ToPackModelResponse();
         }
 
-        public SomePacksModelResponse GetAll(bool? isDraft = null)
+        public PacksModelResponse GetPacks(bool? isDraft = null)
         {
-            List<Pack> entities;
-            if (isDraft != null)
-            {
-                entities = _dbContext.Packs.Where(x => x.IsDraft == isDraft)
+            var entities = _dbContext.Packs
                 .Include(x => x.Questions)
                 .ThenInclude(x => x.CorrectAnswers)
-                .Include(x => x.Questions).ThenInclude(x => x.Image).ToList();
+                .Include(x => x.Questions).ThenInclude(x => x.Image);
+            IQueryable<Pack> packs;
+            if (isDraft != null)
+            {
+                packs = entities.Where(x => x.IsDraft == isDraft);
             }
             else
             {
-                entities = _dbContext.Packs
-                .Include(x => x.Questions)
-                .ThenInclude(x => x.CorrectAnswers)
-                .Include(x => x.Questions).ThenInclude(x => x.Image).ToList();
+                packs = entities;
             }
 
-            var result = new SomePacksModelResponse(new List<PackModelResponse>());
-            entities.ForEach(x => result.Packs.Add(x.ToPackModelResponse()));
+            var result = new PacksModelResponse(new List<PackModelResponse>());
+            packs.ToList().ForEach(x => result.Packs.Add(x.ToPackModelResponse()));
             return result;
         }
 

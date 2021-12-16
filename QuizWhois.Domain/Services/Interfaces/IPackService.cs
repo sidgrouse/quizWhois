@@ -9,7 +9,7 @@ namespace QuizWhois.Domain.Services.Interfaces
 
         public PackModelResponse GetPack(long packId);
 
-        public SomePacksModelResponse GetAll(bool? isDraft = null);
+        public PacksModelResponse GetPacks(bool? isDraft = null);
 
         public Task UpdatePack(PackModelRequest packModel, long packId);
 

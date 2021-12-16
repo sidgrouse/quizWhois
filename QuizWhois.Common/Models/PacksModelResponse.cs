@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace QuizWhois.Common.Models
 {
-    public class SomePacksModelResponse
+    public class PacksModelResponse
     {
         public List<PackModelResponse> Packs { get; set; }
 
-        public SomePacksModelResponse(List<PackModelResponse> packs)
+        public PacksModelResponse(List<PackModelResponse> packs)
         {
             Packs = packs;
         }

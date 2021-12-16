@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
 using QuizWhois.Common;
 using QuizWhois.Common.Models;
@@ -49,6 +51,27 @@ namespace QuizWhois.Domain.Services.Implementations
                 .ThenInclude(x => x.CorrectAnswers)
                 .Include(x => x.Questions).ThenInclude(x => x.Image).FirstOrDefault();
             return entity.ToPackModelResponse();
+        }
+
+        public PacksModelResponse GetPacks(bool? isDraft = null)
+        {
+            var entities = _dbContext.Packs
+                .Include(x => x.Questions)
+                .ThenInclude(x => x.CorrectAnswers)
+                .Include(x => x.Questions).ThenInclude(x => x.Image);
+            IQueryable<Pack> packs;
+            if (isDraft != null)
+            {
+                packs = entities.Where(x => x.IsDraft == isDraft);
+            }
+            else
+            {
+                packs = entities;
+            }
+
+            var result = new PacksModelResponse(new List<PackModelResponse>());
+            packs.ToList().ForEach(x => result.Packs.Add(x.ToPackModelResponse()));
+            return result;
         }
 
         public async Task UpdatePack(PackModelRequest packModel, long packId)

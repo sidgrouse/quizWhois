@@ -88,9 +88,9 @@ namespace QuizWhois.Api.Controllers
         [HttpDelete("{questionId}/rating")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Delete(long questionId, QuestionRatingRequest request)
+        public IActionResult Delete(long questionId, long userId)
         {
-            _questionRatingService.DeleteRating(questionId, request.UserId);
+            _questionRatingService.DeleteRating(questionId, userId);
             return Ok();
         }
 

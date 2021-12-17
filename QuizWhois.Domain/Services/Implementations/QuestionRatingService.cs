@@ -36,7 +36,7 @@ namespace QuizWhois.Domain.Services.Implementations
 
             if (rating > 5 || rating < 1)
             {
-                throw new Exception("Rating more than 5");
+                throw new Exception("Rating less then 1 or more than 5");
             }
 
             if (_context.Set<QuestionRating>().FirstOrDefault(x => x.QuestionId == questionId && x.UserId == userId) != null)

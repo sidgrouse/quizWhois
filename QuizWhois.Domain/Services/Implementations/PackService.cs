@@ -30,7 +30,8 @@ namespace QuizWhois.Domain.Services.Implementations
 
         public async Task<PackModelResponse> CreatePack(PackModelRequest packModel)
         {
-            if (packModel == null || !packModel.IsDraft.HasValue)
+            if (packModel == null || string.IsNullOrWhiteSpace(packModel.Name) ||
+                string.IsNullOrWhiteSpace(packModel.Description) || !packModel.IsDraft.HasValue)
             {
                 throw new ArgumentException("Pack Model or IsDraft field was null");
             }
@@ -50,6 +51,8 @@ namespace QuizWhois.Domain.Services.Implementations
                 .Include(x => x.Questions)
                 .ThenInclude(x => x.CorrectAnswers)
                 .Include(x => x.Questions).ThenInclude(x => x.Image).FirstOrDefault();
+            DataValidation.ValidateEntity(entity, "Pack");
+
             return entity.ToPackModelResponse();
         }
 
@@ -76,13 +79,16 @@ namespace QuizWhois.Domain.Services.Implementations
 
         public async Task UpdatePack(PackModelRequest packModel, long packId)
         {
+            if (packModel == null || string.IsNullOrWhiteSpace(packModel.Name) ||
+                string.IsNullOrWhiteSpace(packModel.Description) || !packModel.IsDraft.HasValue)
+            {
+                throw new ArgumentException("Pack Model or IsDraft field was null");
+            }
+
             DataValidation.ValidateId(packId);
 
             var entity = _dbContext.Set<Pack>().FirstOrDefault(x => x.Id == packId);
-            if (entity == null)
-            {
-                throw new ArgumentException("Pack is not found");
-            }
+            DataValidation.ValidateEntity(entity, "Pack");
 
             if (!string.IsNullOrWhiteSpace(packModel.Name))
             {
@@ -108,10 +114,7 @@ namespace QuizWhois.Domain.Services.Implementations
             DataValidation.ValidateId(packId);
 
             var entity = _dbContext.Set<Pack>().FirstOrDefault(x => x.Id == packId);
-            if (entity == null)
-            {
-                throw new Exception("Pack is not found");
-            }
+            DataValidation.ValidateEntity(entity, "Pack");
 
             _dbContext.Set<Pack>().Remove(entity);
             await _dbContext.SaveChangesAsync();

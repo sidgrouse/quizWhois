@@ -29,10 +29,19 @@ namespace QuizWhois.Domain.Services.Implementations
 
         public async Task<QuestionModelResponse> AddQuestion(QuestionModelRequest questionModel)
         {
-            if (questionModel == null || questionModel.QuestionText == string.Empty || questionModel.CorrectAnswers.Count == 0)
+            if (questionModel == null || string.IsNullOrWhiteSpace(questionModel.QuestionText) ||
+                questionModel.CorrectAnswers.Count == 0)
             {
-                throw new Exception("Operation Model was null");
+                throw new ArgumentException("Question Model was null");
             }
+
+            questionModel.CorrectAnswers.ForEach(x =>
+            { 
+                if (string.IsNullOrWhiteSpace(x))
+                {
+                    throw new ArgumentException("Question Model was null");
+                }
+            });
 
             var correctAnswers = new List<CorrectAnswer>();
             questionModel.CorrectAnswers.ForEach(x => correctAnswers.Add(new CorrectAnswer(x)));
@@ -50,18 +59,22 @@ namespace QuizWhois.Domain.Services.Implementations
             var entity = _context.Questions.Where(x => x.Id == questionId)
                 .Include(x => x.CorrectAnswers)
                 .Include(x => x.Image).FirstOrDefault();
+            DataValidation.ValidateEntity(entity, "Question");
             return entity.ToQuestionModelResponse();
         }
 
         public async Task UpdateQuestion(QuestionModelRequest questionModel, long questionId)
         {
+            if (questionModel == null || string.IsNullOrWhiteSpace(questionModel.QuestionText) ||
+                questionModel.CorrectAnswers.Count == 0)
+            {
+                throw new ArgumentException("Question Model was null");
+            }
+
             DataValidation.ValidateId(questionId);
 
             var entity = _context.Questions.Where(x => x.Id == questionId).Include(x => x.CorrectAnswers).FirstOrDefault();
-            if (entity == null)
-            {
-                throw new Exception("Question is not found");
-            }
+            DataValidation.ValidateEntity(entity, "Question");
 
             entity.QuestionText = questionModel.QuestionText ?? entity.QuestionText;
             if (questionModel.CorrectAnswers != null && questionModel.CorrectAnswers.Count != 0)
@@ -78,10 +91,7 @@ namespace QuizWhois.Domain.Services.Implementations
             DataValidation.ValidateId(questionId);
 
             var entity = _context.Set<Question>().FirstOrDefault(x => x.Id == questionId);
-            if (entity == null)
-            {
-                throw new Exception("Question is not found");
-            }
+            DataValidation.ValidateEntity(entity, "Question");
 
             _context.Set<Question>().Remove(entity);
             await _context.SaveChangesAsync();

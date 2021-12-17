@@ -11,5 +11,13 @@ namespace QuizWhois.Common
                 throw new ArgumentException("Id was invalid number");
             }
         }
+
+        public static void ValidateEntity(object entity, string entityName)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentException($"{entityName} with such id doesn't exist");
+            }
+        }
     }
 }
